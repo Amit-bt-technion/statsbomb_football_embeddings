@@ -1,5 +1,9 @@
 import json
 import pandas as pd
+from urllib.request import Request, urlopen
+import logging
+
+logger = logging.getLogger(__name__)
 
 from tokenizer.event_parsers import (
     ball_receipt_event_parser,
@@ -77,12 +81,21 @@ event_types_to_parsers_mapping = {
 
 
 class Tokenizer:
-    def __init__(self, url: str):
-        self.data = json.loads(url)
+    def __init__(self, path: str, is_online_resource: bool = False):
+        try:
+            if not is_online_resource:
+                with open(path) as match_json:
+                    self.data = json.load(match_json)
+            else:
+                with urlopen(path) as match_json:
+                    self.data = json.load(match_json)
+        except FileNotFoundError:
+            logger.error("json file not found!")
         self.tokenized_events_matrix = pd.DataFrame()  # initialize
 
     def get_tokenized_match_events(self):
-        pass
+        for event in self.data:
+            print(event["type"]["name"])
 
     def update_common_tactics_features(self):
         """

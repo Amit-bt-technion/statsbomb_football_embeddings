@@ -1,130 +1,128 @@
-from tokenizer import Tokenizer
-
-def ball_receipt_event_parser(tokenizer: Tokenizer = None):
+def ball_receipt_event_parser(tokenizer=None):
     pass
 
 
-def ball_recovery_event_parser(tokenizer: Tokenizer = None):
+def ball_recovery_event_parser(tokenizer=None):
     pass
 
 
-def dispossessed_event_parser(tokenizer: Tokenizer = None):
+def dispossessed_event_parser(tokenizer=None):
     pass
 
 
-def duel_event_parser(tokenizer: Tokenizer = None):
+def duel_event_parser(tokenizer=None):
     pass
 
 
-def on_camera_event_parser(tokenizer: Tokenizer = None):
+def on_camera_event_parser(tokenizer=None):
     pass
 
 
-def block_event_parser(tokenizer: Tokenizer = None):
+def block_event_parser(tokenizer=None):
     pass
 
 
-def offside_event_parser(tokenizer: Tokenizer = None):
+def offside_event_parser(tokenizer=None):
     pass
 
 
-def clearance_event_parser(tokenizer: Tokenizer = None):
+def clearance_event_parser(tokenizer=None):
     pass
 
 
-def interception_event_parser(tokenizer: Tokenizer = None):
+def interception_event_parser(tokenizer=None):
     pass
 
 
-def dribble_event_parser(tokenizer: Tokenizer = None):
+def dribble_event_parser(tokenizer=None):
     pass
 
 
-def shot_event_parser(tokenizer: Tokenizer = None):
+def shot_event_parser(tokenizer=None):
     pass
 
 
-def pressure_event_parser(tokenizer: Tokenizer = None):
+def pressure_event_parser(tokenizer=None):
     pass
 
 
-def substitution_event_parser(tokenizer: Tokenizer = None):
+def substitution_event_parser(tokenizer=None):
     pass
 
 
-def own_goal_against_event_parser(tokenizer: Tokenizer = None):
+def own_goal_against_event_parser(tokenizer=None):
     pass
 
 
-def foul_won_event_parser(tokenizer: Tokenizer = None):
+def foul_won_event_parser(tokenizer=None):
     pass
 
 
-def foul_committed_event_parser(tokenizer: Tokenizer = None):
+def foul_committed_event_parser(tokenizer=None):
     pass
 
 
-def goal_keeper_event_parser(tokenizer: Tokenizer = None):
+def goal_keeper_event_parser(tokenizer=None):
     pass
 
 
-def bad_behavior_event_parser(tokenizer: Tokenizer = None):
+def bad_behavior_event_parser(tokenizer=None):
     pass
 
 
-def own_goal_for_event_parser(tokenizer: Tokenizer = None):
+def own_goal_for_event_parser(tokenizer=None):
     pass
 
 
-def player_on_event_parser(tokenizer: Tokenizer = None):
+def player_on_event_parser(tokenizer=None):
     pass
 
 
-def player_off_event_parser(tokenizer: Tokenizer = None):
+def player_off_event_parser(tokenizer=None):
     pass
 
 
-def shield_event_parser(tokenizer: Tokenizer = None):
+def shield_event_parser(tokenizer=None):
     pass
 
 
-def pass_event_parser(tokenizer: Tokenizer = None):
+def pass_event_parser(tokenizer=None):
     pass
 
 
-def fifty_fifty_event_parser(tokenizer: Tokenizer = None):
+def fifty_fifty_event_parser(tokenizer=None):
     pass
 
 
-def starting_xi_event_parser(tokenizer: Tokenizer = None):
+def starting_xi_event_parser(tokenizer=None):
     pass
 
 
-def tactical_shift_event_parser(tokenizer: Tokenizer = None):
+def tactical_shift_event_parser(tokenizer=None):
     pass
 
 
-def error_event_parser(tokenizer: Tokenizer = None):
+def error_event_parser(tokenizer=None):
     pass
 
 
-def miscontrol_event_parser(tokenizer: Tokenizer = None):
+def miscontrol_event_parser(tokenizer=None):
     pass
 
 
-def dribble_past_event_parser(tokenizer: Tokenizer = None):
+def dribble_past_event_parser(tokenizer=None):
     pass
 
 
-def injury_stoppage_event_parser(tokenizer: Tokenizer = None):
+def injury_stoppage_event_parser(tokenizer=None):
     pass
 
 
-def referee_ball_drop_event_parser(tokenizer: Tokenizer = None):
+def referee_ball_drop_event_parser(tokenizer=None):
     pass
 
 
-def carry_event_parser(tokenizer: Tokenizer = None):
+def carry_event_parser(tokenizer=None):
     pass
 
 
