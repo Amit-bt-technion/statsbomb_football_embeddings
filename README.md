@@ -137,31 +137,31 @@
 1. A mapping of players (currently on field) to positions in input vector & positions on field.
 2. Mapping of playing teams to 0 / 1.
 
-# JSON File Embedder
+# JSON File Event Tokenizer
 
 
 > Input: json file url that contains match events data in StatsBomb format.
 
-> Output: A matrix of the embedded representations of the event in the file, in which every row represents an event and rows are ordered by appearance.
+> Output: A matrix of the tokenized event data in the file, in which every row represents an event and rows are ordered by appearance.
 
 ## Main Execution Flow
 
-Embedder API
+Tokenizer API
 
 ```
-embedder = Embedder(<url to json file>)
-matrix = embedder.parse()
+tokenizer = Tokenizer(<url to json file>)
+matrix = tokenizer.parse()
 ```
-Embedder Execution Flow
+Tokenizer Execution Flow
 
 ```
 data = json.load(<url>)
 master = MasterParser(<mappings args>)
 for event in data:
-  embedding = master.parse_event(event)
-  embedder.embedding_matrix.append(embedding)
+  tokenized_event = master.parse_event(event)
+  tokenizer.token_matrix.append(tokenized_event)
 
-pickle.dump(embedder.embedding_matrix)
+pickle.dump(tokenizer.token_matrix)
 ... -> send to Autoencoder
 ```
 Master Execution Flow
@@ -172,7 +172,7 @@ init()
 parse_common_features() # and populate vector accordingly
 # reminder - event parsers for each event type are instantiated in mapping declaration
 event_parser = event_parser_mapping[self.event_type_id](<mapping>)
-return event_parser.parse(eventdata, self.embedding)
+return event_parser.parse(eventdata, self.tokenized_event)
 ```
 Event Parser
 
@@ -180,10 +180,18 @@ Event Parser
 ```
 # reminder - feature parser instantiated in mapping declaration
 # remider - approaches for nested dictionaries: use FeatureParser subclass or write string parser
-for event_name, (embedding_vector_index, feature_parser) in event_features_mapping.items():
+for event_name, (vector_index, feature_parser) in event_features_mapping.items():
   if event_obj.get(event_name, None) is not None:
-    embedding[embedding_vector_index] = feature_parser.get_normalized(event_obj[event_name])
-return embedding
+    tokenized_event[vector_index] = feature_parser.get_normalized(event_obj[event_name])
+return tokenized_event
+```
+
+
+
+
+
+
+
 ```
 
 
