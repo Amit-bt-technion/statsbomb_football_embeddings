@@ -150,7 +150,7 @@ Tokenizer API
 
 ```
 tokenizer = Tokenizer(<url to json file>)
-matrix = tokenizer.parse()
+matrix = tokenizer.get_tokenized_match_events()
 ```
 Tokenizer Execution Flow
 
