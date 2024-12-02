@@ -156,15 +156,15 @@ Tokenizer Execution Flow
 
 ```
 data = json.load(<url>)
-master = MasterParser(<mappings args>)
+match_events_parser = MatchEventsParser(<mappings args>)
 for event in data:
-  tokenized_event = master.parse_event(event)
+  tokenized_event = match_events_parser.parse_event(event)
   tokenizer.token_matrix.append(tokenized_event)
 
 pickle.dump(tokenizer.token_matrix)
 ... -> send to Autoencoder
 ```
-Master Execution Flow
+Match Event Parsing Execution Flow
 
 
 ```

@@ -1,13 +1,11 @@
 import pandas as pd
 from feature_parsers import EventParser, FeatureParser
 
-# Master Parser
-
 # TODO: make use of a better practice
 vector_size = 105
 
 
-class MasterParser:
+class MatchEventsParser:
     def __init__(self, event_parser_mapping: dict[int, EventParser],
                  common_feature_mapping: dict[str, tuple[int, FeatureParser]]):
         self.event_parser_mapping = event_parser_mapping
