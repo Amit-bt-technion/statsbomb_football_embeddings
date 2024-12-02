@@ -15,8 +15,8 @@
 | 0     | Index                      | TBDean - omit |                                                                                      |
 | 1     | Period                     | categorize    |                                                                                      |
 | 2     | Timestamp                  | TBDean - omit | (1) redundant with (period, minute, second) <br/> (2) potential normalization issues |
-| 3     | Minute                     | normalize     | Obtain max of last minutes of each period in the game                                |
-| 4     | Second                     | normalize     |                                                                                      |
+| 3     | Minute                     | categorize    | Obtain max of last minutes of each period in the game                                |
+| 4     | Second                     | categorize    |                                                                                      |
 | 5     | Type.id                    | categorize    |                                                                                      |
 | 6     | Possession_team.id         | custom        | replace team ids with 0/1                                                            |
 | 7     | Play_pattern.id            | categorize    |                                                                                      |

@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Any
 import pandas as pd
-import json
 
 
 # Feature Classes definitions
@@ -43,14 +42,14 @@ class CategoricalFeatureParser(FeatureParser):
 
 # Event Parser class definitions
 
-class EventParser(ABC):
-    def __init__(self, event_features_mapping: dict[str, tuple[int, FeatureParser]]):
-        # might need to add starting index location for vector data population
-        self.event_features_mapping = event_features_mapping
-        self.features_num = len(event_features_mapping)
-        self.tokenized_event = None
-
-    @abstractmethod
-    def parse(self, event_obj: dict[str, Any], tokenized_event: pd.Series) -> pd.Series:
-        self.tokenized_event = tokenized_event
+# class EventParser(ABC):
+#     def __init__(self, event_features_mapping: dict[str, tuple[int, FeatureParser]]):
+#         # might need to add starting index location for vector data population
+#         self.event_features_mapping = event_features_mapping
+#         self.features_num = len(event_features_mapping)
+#         self.tokenized_event = None
+#
+#     @abstractmethod
+#     def parse(self, event_obj: dict[str, Any], tokenized_event: pd.Series) -> pd.Series:
+#         self.tokenized_event = tokenized_event
 
