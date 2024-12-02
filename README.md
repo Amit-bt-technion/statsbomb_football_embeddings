@@ -10,27 +10,28 @@
 ****
 **The following properties should be treated with the specified approach:**
 
-| ID | Property Name | Approach | Comments |
-| - | ------------- | -------- | -------- |
-| 1 | Index | TBDean | |
-| 3 | Period | categorize | |
-| 4 | Timestamp | omit - dean | (1) redundant with (period, minute, second) <br/> (2) potential normalization issues |
-| 5 | Minute | normalize | Obtain max of last minutes of each period in the game |
-| 6 | Second | normalize | |
-| 7 | Type.id | categorize | |
-| 9 | Possession_team.id | custom | replace team ids with 0/1 |
-| 10 | Play_pattern.id | categorize | |
-| 11 | Team.id | custom | replace team id with 0/1 |
-| 13 | Position.id | categorize | |
-| 14 | Location.x | normalize | *Are we sure we don't want to duplicate these for each event type?* |
-| 15 | Location.y | normalize | |
-| 16 | Duration | TBDean | |
-| 17 | under_pressure | normalize | |
-| 18 | off_camera | TBDean | |
-| 19 | out | normalize | |
-| 20 | tactics.lineup | TBDean | |
-| 21 | tactics.formation | TBDean | |
-
+| ID    | Property Name              | Approach    | Comments                                                                             |
+|-------|----------------------------|-------------|--------------------------------------------------------------------------------------|
+| 0     | Index                      | TBDean      |                                                                                      |
+| 1     | Period                     | categorize  |                                                                                      |
+| 2     | Timestamp                  | omit - dean | (1) redundant with (period, minute, second) <br/> (2) potential normalization issues |
+| 3     | Minute                     | normalize   | Obtain max of last minutes of each period in the game                                |
+| 4     | Second                     | normalize   |                                                                                      |
+| 5     | Type.id                    | categorize  |                                                                                      |
+| 6     | Possession_team.id         | custom      | replace team ids with 0/1                                                            |
+| 7     | Play_pattern.id            | categorize  |                                                                                      |
+| 8     | Team.id                    | custom      | replace team id with 0/1                                                             |
+| 9     | Position.id                | categorize  |                                                                                      |
+| 10    | Location.x                 | normalize   | *Are we sure we don't want to duplicate these for each event type?*                  |
+| 11    | Location.y                 | normalize   |                                                                                      |
+| 12    | Duration                   | TBDean      |                                                                                      |
+| 13    | under_pressure             | normalize   |                                                                                      |
+| 14    | off_camera                 | TBDean      |                                                                                      |
+| 15    | out                        | normalize   |                                                                                      |
+| 16-37 | tactics.lineup (team 1)    | TBDean      | positions (i, i+1) = (position_id, jersey_num) of player num (i / 2)                 |
+| 38    | tactics.formation (team 1) | TBDean      |                                                                                      |
+| 39-60 | tactics.lineup (team 2)    | TBDean      | positions (i, i+1) = (position_id, jersey_num) of player num (i / 2)                 |                                                                   |
+| 61    | tactics.formation (team 2) | TBDean      |                                                                                      |
 
 # **Approaches for specialized field types** (keep / omit / normalize / categorize / custom)
 ****
