@@ -4,7 +4,7 @@ from urllib.request import urlopen
 import logging
 from typing import List, Union
 from tokenizer.match_parser import MatchEventsParser
-from feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
+from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
 
 logger = logging.getLogger(__name__)
 
@@ -29,25 +29,30 @@ class Tokenizer:
         self.vector_size = 105
         self.tokenized_events_matrix = pd.DataFrame()
         self.event_types_mapping: Union[dict[int: tuple[MatchEventsParser, int, int]], None] = None
-        self.common_features_indices: Union[tuple[MatchEventsParser, int, int], None] = None
         self.common_features_parsers: Union[dict[str, FeatureParser], None] = None
-        self.initialize_static_properties()
         self.match_parser = MatchEventsParser(
-            self.event_types_mapping,
-            self.common_features_indices,
+            0,
+            59,
             self.vector_size
+        )
+        self.initialize_static_properties()
+
+        self.match_parser.load_mappings(
+            self.common_features_parsers,
+            self.event_types_mapping,
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
-        for event in self.data[0]:
-            event_id = event["type"]["id"]
-            event_parser, start_index, features_num = self.event_types_mapping[event_id]
-            event_parser(start_index, features_num)
+        self.match_parser.parse_event(self.data[0])
+        # for event in self.data:
+        #     self.match_parser.parse_event(event)
+            # event_id = event["type"]["id"]
+            # event_parser, start_index, features_num = self.event_types_mapping[event_id]
+            # event_parser(start_index, features_num)
 
         return self.tokenized_events_matrix
 
     def initialize_static_properties(self) -> None:
-
         # mapping of each event id to: parser function, vector index range start, number of indices in vector
         self.event_types_mapping = {
             2: (self.match_parser.ball_recovery_event_parser,),
@@ -85,21 +90,24 @@ class Tokenizer:
             42: (self.match_parser.ball_receipt_event_parser,),
             43: (self.match_parser.carry_event_parser,)
         }
-        self.common_features_indices = (self.match_parser.common_features_event_parser, 0, 62)
 
         # mapping the key (including full hierarchy from dictionary) to feature parser
         self.common_features_parsers = {
-            "period", CategoricalFeatureParser("period", [range(0, 6)]),
+            "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
             # TODO: awaiting distribution exploration
-            "minute", CategoricalFeatureParser("minute", [range(0, 100)]),
-            "second", CategoricalFeatureParser("second", [range(0, 60)]),
-            "type.id", CategoricalFeatureParser("type", [self.event_types_mapping.keys()]),
-            "possession_team.id", CategoricalFeatureParser("possession_team", [range(0, 2)]),
-            "play_pattern.id", CategoricalFeatureParser("play_pattern", [range(1, 10)]),
-            "team.id", CategoricalFeatureParser("team", [range(0, 2)]),
-            "position.id", CategoricalFeatureParser("position", [range(1, 26)]),
-            # TODO: awaiting distribution exploration - x
-            # TODO: awaiting distribution exploration - y
+            "minute": CategoricalFeatureParser("minute", [i for i in range(0, 100)]),
+            "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
+            "type.id": CategoricalFeatureParser("type", [key for key in self.event_types_mapping.keys()]),
+            "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
+            "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
+            "team.id": CategoricalFeatureParser("team", [0, 1]),
+            "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
+            "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
+            "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
+            "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
+            "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
+            "out": CategoricalFeatureParser("out", [0, 1]),
         }
+
 
 

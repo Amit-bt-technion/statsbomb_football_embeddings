@@ -24,7 +24,6 @@ class RangeFeatureParser(FeatureParser):
         self.min_value = min_value
         self.max_value = max_value
 
-    @abstractmethod
     def get_normalized(self, val):
         # a simple normalization example
         return (val - self.min_value) / (self.max_value - self.min_value)

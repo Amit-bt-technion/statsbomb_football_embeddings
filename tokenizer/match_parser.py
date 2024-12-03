@@ -1,31 +1,47 @@
 import pandas as pd
 from typing import List, Self, Union
 
+from tokenizer.feature_parsers import FeatureParser
+from tokenizer.utils.helper_functions import get_value_of_nested_key
+
 
 class MatchEventsParser:
     def __init__(
         self,
         event_type_mapping: dict[int: tuple[Self, int, int]],
-        common_feature_mapping: tuple[Self, int, int],
+        num_of_common_features: int,
         vector_size: int,
     ):
         self.event_type_mapping = event_type_mapping
-        self.common_feature_mapping = common_feature_mapping
+        self.common_features_parsers = None
+        self.common_features_start_index = None
+        self.num_of_common_features = num_of_common_features
         self.vector_size = vector_size
         self.tokenized_event = None
         self.teams_and_players: Union[dict[int, dict], None] = None
 
     def parse_event(self, event: dict):
         self.tokenized_event = pd.Series(0, index=range(self.vector_size))
-        # call parse_common_features
+        self.parse_common_event_features(event)
         # extract  specific event block (data)
         # call event parser of this event using the mapping and event_type_id property with data
         pass
 
-    # **************************************    Feature Parsers     ******************************************
-    def common_features_event_parser(self, start_index: int, num_of_features: int):
-        pass
+    def load_mappings(
+        self,
+        common_features_parsers: dict[str, FeatureParser],
+        event_type_mapping: dict[int: tuple[Self, int, int]]
+    ):
+        self.common_features_parsers = common_features_parsers
+        self.event_type_mapping = event_type_mapping
 
+    # **************************************    Feature Parsers     ******************************************
+    def parse_common_event_features(self, event: dict):
+        for dict_path, feature_parser in self.common_features_parsers.items():
+            output_val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+            print(output_val)
+
+    # TODO: can generalize this into a single event parser function
     def ball_receipt_event_parser(self, start_index: int, num_of_features: int):
         pass
 
