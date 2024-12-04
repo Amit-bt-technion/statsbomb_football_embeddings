@@ -8,17 +8,17 @@ def get_value_of_nested_key(dictionary: dict, key: str, default=0):
     :return: the value of the key if found in dictionary, and otherwise return the default value
     """
     for key in key.split('.'):
-        # if key contains [_], parsing as list index
+        # if key contains [_], parsing as list index. IMPORTANT! assuming no mid-level list notation (will not
+        # recursively continue traversing path inside the list
         if '[' in key:
             key, index = key.split('[', 1)
-            index = index[:-1]
+            index = int(index[:-1])
             if key not in dictionary:
                 return default
             li = dictionary[key]
             if type(li) is not list or len(li) < index:
                 return default
-            dictionary = li[key]
-            continue
+            return li[index]
         if key not in dictionary:
             return default
         dictionary = dictionary[key]
