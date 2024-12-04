@@ -9,16 +9,15 @@ class MatchEventsParser:
     def __init__(
         self,
         event_type_mapping: dict[int: tuple[Self, int, int]],
-        num_of_common_features: int,
+        common_features_parsers: dict[str, FeatureParser],
         vector_size: int,
     ):
         self.event_type_mapping = event_type_mapping
-        self.common_features_parsers = None
-        self.common_features_start_index = None
-        self.num_of_common_features = num_of_common_features
+        self.common_features_parsers = common_features_parsers
+        self.common_features_start_index = 0
+        self.num_of_common_features = len(common_features_parsers)
         self.vector_size = vector_size
         self.tokenized_event = None
-        self.teams_and_players: Union[dict[int, dict], None] = None
 
     def parse_event(self, event: dict):
         self.tokenized_event = pd.Series(0, index=range(self.vector_size))
@@ -26,14 +25,6 @@ class MatchEventsParser:
         # extract  specific event block (data)
         # call event parser of this event using the mapping and event_type_id property with data
         pass
-
-    def load_mappings(
-        self,
-        common_features_parsers: dict[str, FeatureParser],
-        event_type_mapping: dict[int: tuple[Self, int, int]]
-    ):
-        self.common_features_parsers = common_features_parsers
-        self.event_type_mapping = event_type_mapping
 
     # **************************************    Feature Parsers     ******************************************
     def parse_common_event_features(self, event: dict) -> pd.Series:

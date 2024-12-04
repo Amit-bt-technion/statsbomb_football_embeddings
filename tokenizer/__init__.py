@@ -293,14 +293,9 @@ class Tokenizer:
         self.vector_size = 105
         self.tokenized_events_matrix = pd.DataFrame()
         self.match_parser = MatchEventsParser(
-            0,
-            14,
-            self.vector_size
-        )
-
-        self.match_parser.load_mappings(
-            common_features_parsers,
             event_types_mapping,
+            common_features_parsers,
+            self.vector_size
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
