@@ -36,10 +36,17 @@ class MatchEventsParser:
         self.event_type_mapping = event_type_mapping
 
     # **************************************    Feature Parsers     ******************************************
-    def parse_common_event_features(self, event: dict):
-        for dict_path, feature_parser in self.common_features_parsers.items():
-            output_val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
-            print(output_val)
+    def parse_common_event_features(self, event: dict) -> pd.Series:
+        """
+        parsers the keys in the event object that are common and exist for every event.
+        :param event: a single event loaded from match json file.
+        :return: a pandas series of length self.num_of_common_features that stores the normalized values after parsing.
+        """
+        features = pd.Series(0, index=range(self.num_of_common_features))
+        for i, (dict_path, feature_parser) in enumerate(self.common_features_parsers.items()):
+            features.iloc[i] = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+        print(features)
+        return features
 
     # TODO: can generalize this into a single event parser function
     def ball_receipt_event_parser(self, start_index: int, num_of_features: int):
