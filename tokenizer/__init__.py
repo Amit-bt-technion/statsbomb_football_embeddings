@@ -187,18 +187,14 @@ event_types_mapping = {
         }
     },
     35: {
-        "ignore_event_type": False,
-        "starting_index": 0,
-        "feature_parsers": {
-
-        }
+        "ignore_event_type": True,
+        "starting_index": -1,
+        "feature_parsers": {}
     },
     36: {
-        "ignore_event_type": False,
-        "starting_index": 0,
-        "feature_parsers": {
-
-        }
+        "ignore_event_type": True,
+        "starting_index": -1,
+        "feature_parsers": {}
     },
     37: {
         "ignore_event_type": False,
