@@ -1,20 +1,16 @@
 import pandas as pd
 from typing import List, Self, Union
 
-from tokenizer.feature_parsers import FeatureParser
+from tokenizer import common_features_parsers, event_types_mapping
 from tokenizer.utils.helper_functions import get_value_of_nested_key
 
 
 class MatchEventsParser:
     def __init__(
         self,
-        event_type_mapping: dict[int: tuple[Self, int, int]],
-        common_features_parsers: dict[str, FeatureParser],
         common_features_start_index: int,
         vector_size: int,
     ):
-        self.event_type_mapping = event_type_mapping
-        self.common_features_parsers = common_features_parsers
         self.common_features_start_index = common_features_start_index
         self.num_of_common_features = len(common_features_parsers)
         self.vector_size = vector_size
@@ -23,7 +19,7 @@ class MatchEventsParser:
     def parse_event(self, event: dict) -> Union[pd.Series, None]:
         self.tokenized_event = pd.Series(0, index=range(self.vector_size), dtype=float)
         event_id = event["type"]["id"]
-        if self.event_type_mapping[event_id]["ignore_event_type"]:
+        if event_types_mapping[event_id]["ignore_event_type"]:
             return None
         self.parse_common_event_features(event)
         self.specific_event_parser(event, event_id)
@@ -37,7 +33,7 @@ class MatchEventsParser:
         :return: a pandas series of length self.num_of_common_features that stores the normalized values after parsing.
         """
         features = pd.Series(0.0, index=range(self.num_of_common_features))
-        for i, (dict_path, feature_parser) in enumerate(self.common_features_parsers.items()):
+        for i, (dict_path, feature_parser) in enumerate(common_features_parsers.items()):
             val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
             features.iloc[i] = val
 
@@ -46,7 +42,7 @@ class MatchEventsParser:
         return features
 
     def specific_event_parser(self, event: dict, event_id: int):
-        event_mapping = self.event_type_mapping[event_id]
+        event_mapping = event_types_mapping[event_id]
         starting_index = event_mapping["starting_index"]
         parsers = event_mapping["feature_parsers"]
         num_of_features = len(parsers)

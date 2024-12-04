@@ -1,4 +1,4 @@
-from tokenizer import Tokenizer
+from tokenizer.tokenizer import Tokenizer
 
 if __name__ == "__main__":
     tokenizer = Tokenizer(
