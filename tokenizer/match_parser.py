@@ -42,9 +42,10 @@ class MatchEventsParser:
         :param event: a single event loaded from match json file.
         :return: a pandas series of length self.num_of_common_features that stores the normalized values after parsing.
         """
-        features = pd.Series(0, index=range(self.num_of_common_features))
+        features = pd.Series(0.0, index=range(self.num_of_common_features))
         for i, (dict_path, feature_parser) in enumerate(self.common_features_parsers.items()):
-            features.iloc[i] = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+            val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+            features.iloc[i] = val
         print(features)
         return features
 
