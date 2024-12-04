@@ -11,244 +11,245 @@ logger = logging.getLogger(__name__)
 # ************************************************************************************************************
 #                                           Parsers Mapping
 # ************************************************************************************************************
+common_features_start_index = 0
 
 event_types_mapping = {
     # ball recovery parser
     2: {
+        "ignore_event_type": False,
         "starting_index": 14,
-        "num_of_features": 2,
         "feature_parsers": {
             "ball_recovery.offensive": CategoricalFeatureParser("offensive ball recovery", [0, 1]),
             "ball_recovery.recovery_failure": CategoricalFeatureParser("failed ball recovery", [0, 1]),
         }
     },
     3: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     4: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     5: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     6: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     8: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     9: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     10: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     14: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     16: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     17: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     18: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     19: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     20: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     21: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     22: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     23: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     24: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     25: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     26: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     27: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     28: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     30: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     33: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     34: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     35: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     36: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     37: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     38: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     39: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     40: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     41: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     42: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
     },
     43: {
+        "ignore_event_type": False,
         "starting_index": 0,
-        "num_of_features": 0,
         "feature_parsers": {
 
         }
@@ -290,21 +291,21 @@ class Tokenizer:
         except FileNotFoundError:
             logger.error("json file not found!")
 
-        self.vector_size = 105
-        self.tokenized_events_matrix = pd.DataFrame()
+        self.vector_size = 85
+        self.tokenized_events_matrix = pd.DataFrame(columns=[f'col_{i}' for i in range(self.vector_size)], dtype=float)
         self.match_parser = MatchEventsParser(
             event_types_mapping,
             common_features_parsers,
+            common_features_start_index,
             self.vector_size
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
-        self.match_parser.parse_event(self.data[0])
-        # for event in self.data:
-        #     self.match_parser.parse_event(event)
-            # event_id = event["type"]["id"]
-            # event_parser, start_index, features_num = self.event_types_mapping[event_id]
-            # event_parser(start_index, features_num)
+        for event in self.data[:10]:
+            tokenized_event = self.match_parser.parse_event(event)
+            if tokenized_event is not None:
+                print(tokenized_event)
+                self.tokenized_events_matrix.loc[len(self.tokenized_events_matrix)] = tokenized_event
 
         return self.tokenized_events_matrix
 

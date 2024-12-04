@@ -14,20 +14,20 @@
 |----|----------------------------|---------------|--------------------------------------------------------------------------------------|
 | -  | Index                      | TBDean - omit |                                                                                      |
 | 0  | Period                     | categorize    |                                                                                      |
-| 1  | Timestamp                  | TBDean - omit | (1) redundant with (period, minute, second) <br/> (2) potential normalization issues |
-| 2  | Minute                     | categorize    | Obtain max of last minutes of each period in the game                                |
-| 3  | Second                     | categorize    |                                                                                      |
-| 4  | Type.id                    | categorize    |                                                                                      |
-| 5  | Possession_team.id         | custom        | replace team ids with 0/1                                                            |
-| 6  | Play_pattern.id            | categorize    |                                                                                      |
-| 7  | Team.id                    | custom        | replace team id with 0/1                                                             |
-| 8  | Position.id                | categorize    |                                                                                      |
-| 9  | Location.x                 | normalize     | *Are we sure we don't want to duplicate these for each event type?*                  |
-| 10 | Location.y                 | normalize     |                                                                                      |
-| 11 | Duration                   | TBDean        |                                                                                      |
-| 12 | under_pressure             | categorize    |                                                                                      |
+| -  | Timestamp                  | TBDean - omit | (1) redundant with (period, minute, second) <br/> (2) potential normalization issues |
+| 1  | Minute                     | categorize    | Obtain max of last minutes of each period in the game                                |
+| 2  | Second                     | categorize    |                                                                                      |
+| 3  | Type.id                    | categorize    |                                                                                      |
+| 4  | Possession_team.id         | custom        | replace team ids with 0/1                                                            |
+| 5  | Play_pattern.id            | categorize    |                                                                                      |
+| 6  | Team.id                    | custom        | replace team id with 0/1                                                             |
+| 7  | Position.id                | categorize    |                                                                                      |
+| 8  | Location.x                 | normalize     | *Are we sure we don't want to duplicate these for each event type?*                  |
+| 9  | Location.y                 | normalize     |                                                                                      |
+| 10 | Duration                   | TBDean        |                                                                                      |
+| 11 | under_pressure             | categorize    |                                                                                      |
 | -  | off_camera                 | TBDean        |                                                                                      |
-| 13 | out                        | categorize    |                                                                                      |
+| 12 | out                        | categorize    |                                                                                      |
 | -  | tactics.lineup (team 1)    | TBDean - omit | positions (i, i+1) = (position_id, jersey_num) of player num (i / 2)                 |
 | -  | tactics.formation (team 1) | TBDean - omit |                                                                                      |
 | -  | tactics.lineup (team 2)    | TBDean - omit | positions (i, i+1) = (position_id, jersey_num) of player num (i / 2)                 |                                                                   |
@@ -128,9 +128,6 @@
 | 80 | shot.outcome.id                            | categorize|                                                             |
 | 81 | substitution.replacement.id                | custom    | Patched from player.id and player-position mapping          |
 | 82 | substitution.outcome.id                    | categorize|                                                             |
-| -  | ------------------                         | ----------|                                                             |
-| a  | global.player_position_mapping[i].position | categorize | Array for mapping all active player positions               |
-| b  | global.player_position_mapping[i].mapping  | categorize | Player's index in the mapping array                         |
 
 
 
