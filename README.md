@@ -47,12 +47,12 @@
 
 | ID | Property Name                              | Approach  | Comments                                                    |
 |----|--------------------------------------------|-----------|-------------------------------------------------------------|
+| 14 | ball_recovery.offensive                    | categorize |                                                             |
+| 15 | ball_recovery.recovery_failure             | categorize |                                                             |
 | 1  | 5050.outcome.id                            | categorize |                                                             |
 | 2  | 5050.counterpress                          | categorize |                                                             |
 | 3  | bad_behavior.card.id                       | categorize |                                                             |
 | 4  | ball_recipt.outcome.id                     | categorize |                                                             |
-| 5  | ball_recovery.offensive                    | categorize |                                                             |
-| 6  | ball_recovery.recovery_failure             | categorize |                                                             |
 | 7  | block.deflection                           | categorize |                                                             |
 | 8  | block.offensive                            | categorize |                                                             |
 | 9  | block.save_block                           | categorize |                                                             |
@@ -128,9 +128,9 @@
 | 80 | shot.outcome.id                            | categorize|                                                             |
 | 81 | substitution.replacement.id                | custom    | Patched from player.id and player-position mapping          |
 | 82 | substitution.outcome.id                    | categorize|                                                             |
-| - | ------------------                         | ----------|                                                             |
-| a | global.player_position_mapping[i].position | categorize | Array for mapping all active player positions               |
-| b | global.player_position_mapping[i].mapping  | categorize | Player's index in the mapping array                         |
+| -  | ------------------                         | ----------|                                                             |
+| a  | global.player_position_mapping[i].position | categorize | Array for mapping all active player positions               |
+| b  | global.player_position_mapping[i].mapping  | categorize | Player's index in the mapping array                         |
 
 
 

@@ -9,6 +9,270 @@ from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, R
 logger = logging.getLogger(__name__)
 
 # ************************************************************************************************************
+#                                           Parsers Mapping
+# ************************************************************************************************************
+
+event_types_mapping = {
+    # ball recovery parser
+    2: {
+        "starting_index": 14,
+        "num_of_features": 2,
+        "feature_parsers": {
+            "ball_recovery.offensive": CategoricalFeatureParser("offensive ball recovery", [0, 1]),
+            "ball_recovery.recovery_failure": CategoricalFeatureParser("failed ball recovery", [0, 1]),
+        }
+    },
+    3: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    4: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    5: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    6: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    8: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    9: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    10: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    14: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    16: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    17: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    18: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    19: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    20: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    21: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    22: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    23: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    24: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    25: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    26: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    27: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    28: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    30: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    33: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    34: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    35: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    36: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    37: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    38: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    39: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    40: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    41: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    42: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+    43: {
+        "starting_index": 0,
+        "num_of_features": 0,
+        "feature_parsers": {
+
+        }
+    },
+}
+
+common_features_parsers = {
+    "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
+    # TODO: awaiting distribution exploration
+    "minute": CategoricalFeatureParser("minute", [i for i in range(0, 100)]),
+    "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
+    "type.id": CategoricalFeatureParser("type", [key for key in event_types_mapping.keys()]),
+    "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
+    "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
+    "team.id": CategoricalFeatureParser("team", [0, 1]),
+    "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
+    "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
+    "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
+    "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
+    "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
+    "out": CategoricalFeatureParser("out", [0, 1]),
+}
+
+# ************************************************************************************************************
 #                                           Tokenizer Class
 # ************************************************************************************************************
 
@@ -28,18 +292,15 @@ class Tokenizer:
 
         self.vector_size = 105
         self.tokenized_events_matrix = pd.DataFrame()
-        self.event_types_mapping: Union[dict[int: tuple[MatchEventsParser, int, int]], None] = None
-        self.common_features_parsers: Union[dict[str, FeatureParser], None] = None
         self.match_parser = MatchEventsParser(
             0,
             14,
             self.vector_size
         )
-        self.initialize_static_properties()
 
         self.match_parser.load_mappings(
-            self.common_features_parsers,
-            self.event_types_mapping,
+            common_features_parsers,
+            event_types_mapping,
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
@@ -52,62 +313,6 @@ class Tokenizer:
 
         return self.tokenized_events_matrix
 
-    def initialize_static_properties(self) -> None:
-        # mapping of each event id to: parser function, vector index range start, number of indices in vector
-        self.event_types_mapping = {
-            2: (self.match_parser.ball_recovery_event_parser,),
-            3: (self.match_parser.dispossessed_event_parser,),
-            4: (self.match_parser.duel_event_parser,),
-            5: (self.match_parser.skip_event_type_parser,),
-            6: (self.match_parser.block_event_parser,),
-            8: (self.match_parser.offside_event_parser,),
-            9: (self.match_parser.clearance_event_parser,),
-            10: (self.match_parser.interception_event_parser,),
-            14: (self.match_parser.dribble_past_event_parser,),
-            16: (self.match_parser.shot_event_parser,),
-            17: (self.match_parser.pressure_event_parser,),
-            18: (self.match_parser.skip_event_type_parser,),
-            19: (self.match_parser.substitution_event_parser,),
-            20: (self.match_parser.own_goal_against_event_parser,),
-            21: (self.match_parser.foul_won_event_parser,),
-            22: (self.match_parser.foul_committed_event_parser,),
-            23: (self.match_parser.goal_keeper_event_parser,),
-            24: (self.match_parser.bad_behavior_event_parser,),
-            25: (self.match_parser.own_goal_for_event_parser,),
-            26: (self.match_parser.player_on_event_parser,),
-            27: (self.match_parser.player_off_event_parser,),
-            28: (self.match_parser.shield_event_parser,),
-            30: (self.match_parser.pass_event_parser,),
-            33: (self.match_parser.fifty_fifty_event_parser,),
-            34: (self.match_parser.skip_event_type_parser,),
-            35: (self.match_parser.starting_xi_event_parser,),
-            36: (self.match_parser.tactical_shift_event_parser,),
-            37: (self.match_parser.error_event_parser,),
-            38: (self.match_parser.miscontrol_event_parser,),
-            39: (self.match_parser.dribble_past_event_parser,),
-            40: (self.match_parser.injury_stoppage_event_parser,),
-            41: (self.match_parser.referee_ball_drop_event_parser,),
-            42: (self.match_parser.ball_receipt_event_parser,),
-            43: (self.match_parser.carry_event_parser,)
-        }
-
-        # mapping the key (including full hierarchy from dictionary) to feature parser
-        self.common_features_parsers = {
-            "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
-            # TODO: awaiting distribution exploration
-            "minute": CategoricalFeatureParser("minute", [i for i in range(0, 100)]),
-            "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
-            "type.id": CategoricalFeatureParser("type", [key for key in self.event_types_mapping.keys()]),
-            "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
-            "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
-            "team.id": CategoricalFeatureParser("team", [0, 1]),
-            "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
-            "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
-            "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
-            "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
-            "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
-            "out": CategoricalFeatureParser("out", [0, 1]),
-        }
 
 
 
