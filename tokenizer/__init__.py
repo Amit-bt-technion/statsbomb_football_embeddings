@@ -32,7 +32,7 @@ class Tokenizer:
         self.common_features_parsers: Union[dict[str, FeatureParser], None] = None
         self.match_parser = MatchEventsParser(
             0,
-            59,
+            14,
             self.vector_size
         )
         self.initialize_static_properties()
