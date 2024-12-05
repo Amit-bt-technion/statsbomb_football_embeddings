@@ -49,6 +49,9 @@
 |----|--------------------------------------------|-----------|-------------------------------------------------------------|
 | 14 | ball_recovery.offensive                    | categorize |                                                             |
 | 15 | ball_recovery.recovery_failure             | categorize |                                                             |
+| 16 | duel.counterpress                          | categorize|                                                             |
+| 17 | duel.type.id                               | categorize|                                                             |
+| 18 | duel.outcome.id                            | categorize|                                                             |
 | 1  | 5050.outcome.id                            | categorize |                                                             |
 | 2  | 5050.counterpress                          | categorize |                                                             |
 | 3  | bad_behavior.card.id                       | categorize |                                                             |
@@ -66,9 +69,6 @@
 | 18 | dribble.outcome.id                         | categorize |                                                             |
 | 19 | dribble.no_touch                           | categorize |                                                             |
 | 20 | dribble_post.counterpress                  | categorize |                                                             |
-| 21 | duel.counterpress                          | categorize|                                                             |
-| 22 | duel.type.id                               | categorize|                                                             |
-| 23 | duel.outcome.id                            | categorize|                                                             |
 | 24 | foul_commited.counterpress                 | categorize|                                                             |
 | 25 | foul_commited.offensive                    | categorize|                                                             |
 | 26 | foul_commited.type.id                      | categorize|                                                             |
