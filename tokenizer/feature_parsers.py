@@ -27,6 +27,8 @@ class RangeFeatureParser(FeatureParser):
     def get_normalized(self, val):
         if val > self.max_value:
             val = self.max_value
+        if val < self.min_value:
+            val = self.min_value
         return (val - self.min_value) / (self.max_value - self.min_value)
 
 
