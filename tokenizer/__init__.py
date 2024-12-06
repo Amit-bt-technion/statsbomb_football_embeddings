@@ -1,5 +1,10 @@
 import logging
-from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
+from tokenizer.feature_parsers import (
+    FeatureParser,
+    CategoricalFeatureParser,
+    RangeFeatureParser,
+    PassRecipientFeatureParser
+)
 
 logger = logging.getLogger(__name__)
 
@@ -206,11 +211,9 @@ event_types_mapping = {
         "starting_index": 45,
         "feature_parsers": {
             "pass.type.id": CategoricalFeatureParser("pass type", [i for i in range(61, 68)]),
-            # TODO: address recipient id
-            "pass.recipient.id": None,
             "pass.length": RangeFeatureParser("pass length", 0, 120),
             "pass.angle": RangeFeatureParser("pass angle", -3.15, 3.15),
-            "pass.height": CategoricalFeatureParser("pass height", [1, 2, 3]),
+            "pass.height.id": CategoricalFeatureParser("pass height", [1, 2, 3]),
             "pass.end_location[0]": RangeFeatureParser("pass end location x", 0, 120),
             "pass.end_location[1]": RangeFeatureParser("pass end location y", 0, 80),
             "pass.backheel": CategoricalFeatureParser("pass backheel", [0, 1]),
@@ -224,7 +227,11 @@ event_types_mapping = {
             "pass.body_part.id": CategoricalFeatureParser("pass body part", [37, 38, 40, 68, 69, 70, 106]),
             "pass.outcome.id": CategoricalFeatureParser("pass outcome", [9, 74, 75, 76, 77]),
             "pass.technique.id": CategoricalFeatureParser("pass technique", [104, 105, 107, 108]),
-        }
+        },
+        "special_parsers": {
+            "pass.recipient.id": PassRecipientFeatureParser("player position"),
+        },
+        "num_of_special_features": 1
     },
     # 50-50 event
     33: {
