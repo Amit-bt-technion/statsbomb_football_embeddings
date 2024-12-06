@@ -31,7 +31,7 @@ class Tokenizer:
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
-        for event in self.data:
+        for i, event in enumerate(self.data):
             tokenized_event = self.match_parser.parse_event(event)
             if tokenized_event is not None:
                 print(tokenized_event)

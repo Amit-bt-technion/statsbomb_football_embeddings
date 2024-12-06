@@ -58,13 +58,25 @@ class MatchEventsParser:
         event_mapping = event_types_mapping[event_id]
         starting_index = event_mapping["starting_index"]
         parsers = event_mapping["feature_parsers"]
-        num_of_features = len(parsers)
-        features = pd.Series(0.0, index=range(num_of_features))
-        for i, (dict_path, feature_parser) in enumerate(parsers.items()):
-            val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
-            features.iloc[i] = val
+        # calculate total number of features in the specific event's range
+        total_num_of_features = len(parsers) + event_mapping.get("num_of_special_features", 0)
+        features = []
 
-        self.tokenized_event.iloc[starting_index: starting_index + num_of_features] = features
+        # interating through regular feature parsers
+        for dict_path, feature_parser in parsers.items():
+            val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+            features.append(val)
+
+        # calling special feature parsing functions that utilize the bottom part of index range in vector
+        special_parsers = event_mapping.get("special_parsers", {})
+        for dict_path, special_parser in special_parsers.items():
+            vals = special_parser.get_normalized(
+                get_value_of_nested_key(event, dict_path),
+                match_parser=self,
+                team_id=event["team"]["id"]
+            )
+            features.extend(vals)
+        self.tokenized_event.iloc[starting_index: starting_index + total_num_of_features] = features
         return features
 
     # **************************************    Special event_handlers     ******************************************

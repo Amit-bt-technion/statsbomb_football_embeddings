@@ -91,7 +91,7 @@ event_types_mapping = {
     # shot event - setting starting index to the end of the vector
     16: {
         "ignore_event_type": False,
-        "starting_index": 68,
+        "starting_index": 69,
         "feature_parsers": {
             "shot.type.id": CategoricalFeatureParser("shot type", [61, 62, 87, 88]),
             "shot.end_location[0]": RangeFeatureParser("shot end location x", 0, 120),
@@ -291,16 +291,18 @@ event_types_mapping = {
         "starting_index": 66,
         "feature_parsers": {}
     },
-    # lost out event
+    # ball recipt event
     42: {
         "ignore_event_type": False,
         "starting_index": 66,
-        "feature_parsers": {}
+        "feature_parsers": {
+            "ball_receipt.outcome.id": CategoricalFeatureParser("ball receipt outcome", [9])
+        }
     },
     # carry event
     43: {
         "ignore_event_type": False,
-        "starting_index": 66,
+        "starting_index": 67,
         "feature_parsers": {
             "carry.end_location[0]": RangeFeatureParser("carry end location x", 0, 120),
             "carry.end_location[1]": RangeFeatureParser("carry end location y", 0, 80),
