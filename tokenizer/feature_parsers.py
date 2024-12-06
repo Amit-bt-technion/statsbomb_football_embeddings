@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Any
+from typing import List, Any, Union
 import pandas as pd
 
 
@@ -11,7 +11,7 @@ class FeatureParser(ABC):
 
     # TODO: implement and override as necessary
     @abstractmethod
-    def get_normalized(self, val: float) -> float:
+    def get_normalized(self, val: float) -> Union[float, List[float]]:
         pass
 
     def __repr__(self):
@@ -38,20 +38,23 @@ class CategoricalFeatureParser(FeatureParser):
         self.categories = {value: index + 1 for index, value in enumerate(categories)}
         self.num_categories = len(categories)
 
-    def get_normalized(self, val):
+    def get_normalized(self, val, **kwargs):
         return self.categories.get(val, 0) / self.num_categories
 
 
-# Event Parser class definitions
+class PassRecipientFeatureParser(FeatureParser):
+    def __init__(self, name: str):
+        super().__init__(name)
 
-# class EventParser(ABC):
-#     def __init__(self, event_features_mapping: dict[str, tuple[int, FeatureParser]]):
-#         # might need to add starting index location for vector data population
-#         self.event_features_mapping = event_features_mapping
-#         self.features_num = len(event_features_mapping)
-#         self.tokenized_event = None
-#
-#     @abstractmethod
-#     def parse(self, event_obj: dict[str, Any], tokenized_event: pd.Series) -> pd.Series:
-#         self.tokenized_event = tokenized_event
-
+    def get_normalized(self, val, **kwargs) -> List[float]:
+        """
+        calculates a normalized value of the position of the player, identified by the id
+        :param val: a value representing the player id in the json file
+        :param kwargs['match_parser']: a MatchEventParser instance of the current match
+        :param kwargs['team_id']: the id of the team whose player recipient belongs to
+        :return: the normalized value of the position of the player
+        """
+        match_parser = kwargs["match_parser"]
+        team_id = kwargs["team_id"]
+        # positions in the teams_and_players mapping are normalized
+        return [match_parser.teams_and_players[team_id][val]]
