@@ -54,6 +54,9 @@ class PassRecipientFeatureParser(FeatureParser):
         :param kwargs['team_id']: the id of the team whose player recipient belongs to
         :return: the normalized value of the position of the player
         """
+        # if val is 0, 'recipient' doesn't exist on 'pass' dict, pass is incomplete
+        if val == 0:
+            return [0]
         match_parser = kwargs["match_parser"]
         team_id = kwargs["team_id"]
         # positions in the teams_and_players mapping are normalized
