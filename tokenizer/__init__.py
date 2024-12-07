@@ -3,7 +3,8 @@ from tokenizer.feature_parsers import (
     FeatureParser,
     CategoricalFeatureParser,
     RangeFeatureParser,
-    PassRecipientFeatureParser
+    PassRecipientFeatureParser,
+    FreezeFrameFeaturesParser
 )
 
 logger = logging.getLogger(__name__)
@@ -107,8 +108,11 @@ event_types_mapping = {
             "clearance.technique.id": CategoricalFeatureParser("shot technique", [i for i in range(89, 96)]),
             "clearance.body_part.id": CategoricalFeatureParser("shot body part", [37, 38, 40, 70]),
             "clearance.outcome.id": CategoricalFeatureParser("shot body part", [96, 97, 98, 99, 100, 101, 115, 116]),
-            # TODO: handle freeze frame
-        }
+        },
+        "special_parsers": {
+            "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame"),
+        },
+        "num_of_special_features": 40
     },
     # pressure event
     17: {
