@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 #                                           Parsers Mapping
 # ************************************************************************************************************
 common_features_start_index = 0
+num_of_players_in_freeze_frame = 10
 
 event_types_mapping = {
     # ball recovery event
@@ -110,9 +111,9 @@ event_types_mapping = {
             "clearance.outcome.id": CategoricalFeatureParser("shot body part", [96, 97, 98, 99, 100, 101, 115, 116]),
         },
         "special_parsers": {
-            "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame"),
+            "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame", num_of_players_in_freeze_frame),
         },
-        "num_of_special_features": 40
+        "num_of_special_features": num_of_players_in_freeze_frame * 4
     },
     # pressure event
     17: {

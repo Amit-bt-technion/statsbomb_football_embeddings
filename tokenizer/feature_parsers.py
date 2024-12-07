@@ -61,3 +61,34 @@ class PassRecipientFeatureParser(FeatureParser):
         team_id = kwargs["team_id"]
         # positions in the teams_and_players mapping are normalized
         return [match_parser.teams_and_players[team_id][val]]
+
+
+class FreezeFrameFeaturesParser(FeatureParser):
+    def __init__(self, name: str, num_of_features):
+        super().__init__(name)
+        self.num_of_players = num_of_features // 4
+
+    def get_normalized(self, val: List[float], **kwargs) -> List[float]:
+        """
+        returns a list of length 4 * num_of_players, containing the normalized values for player position, x location,
+        y location, and is teammate for every player in the top num_of_players
+        :param val: the freeze_frame object from the shot event
+        :param kwargs['match_parser']: a MatchEventParser instance of the current match
+        :param kwargs['team_id']: the id of the team whose player recipient belongs to
+        :return:
+        """
+        if type(val) is not list or len(val) == 0:
+            return [0 for i in range(4 * self.num_of_players)]
+
+        match_parser = kwargs["match_parser"]
+        team_id = kwargs["team_id"]
+        features = []
+
+        num_of_players = min(self.num_of_players, len(val))
+        for player_obj in val[:num_of_players]:
+            # parse if teammate
+            # check fo player id under the relevant team
+            # extract position from teams_and_players
+            player_id = player_obj["player"]["id"]
+            features.append(match_parser.teams_and_players[team_id])
+

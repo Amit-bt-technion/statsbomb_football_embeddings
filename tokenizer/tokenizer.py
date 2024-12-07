@@ -15,7 +15,7 @@ class Tokenizer:
         # load the json list of dicts
         try:
             if not is_online_resource:
-                with open(path) as match_json:
+                with open(path, encoding='utf-8') as match_json:
                     self.data: List[dict] = json.load(match_json)
             else:
                 with urlopen(path) as match_json:
@@ -33,6 +33,7 @@ class Tokenizer:
     def get_tokenized_match_events(self) -> pd.DataFrame:
         for i, event in enumerate(self.data):
             tokenized_event = self.match_parser.parse_event(event)
+            print(f"~~~~~~~~~~~~ {i}")
             if tokenized_event is not None:
                 print(tokenized_event)
                 self.tokenized_events_matrix.loc[len(self.tokenized_events_matrix)] = tokenized_event
