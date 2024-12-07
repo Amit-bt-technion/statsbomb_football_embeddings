@@ -156,7 +156,7 @@ event_types_mapping = {
             "foul_committed.offensive": CategoricalFeatureParser("offensive foul committed", [0, 1]),
             "foul_committed.advantage": CategoricalFeatureParser("foul committed advantage", [0, 1]),
             "foul_committed.penalty": CategoricalFeatureParser("foul committed penalty", [0, 1]),
-            "foul_committed.card": CategoricalFeatureParser("foul committed penalty", [5, 6, 7]),
+            "foul_committed.card.id": CategoricalFeatureParser("foul committed penalty", [5, 6, 7]),
         }
     },
     # goal keeper event
