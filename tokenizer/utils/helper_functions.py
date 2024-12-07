@@ -16,7 +16,7 @@ def get_value_of_nested_key(dictionary: dict, key: str, default=0):
             if key not in dictionary:
                 return default
             li = dictionary[key]
-            if type(li) is not list or len(li) < index:
+            if type(li) is not list or len(li) <= index:
                 return default
             return li[index]
         if key not in dictionary:
