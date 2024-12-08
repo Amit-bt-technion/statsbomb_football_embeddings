@@ -73,7 +73,7 @@ class MatchEventsParser:
             vals = special_parser.get_normalized(
                 get_value_of_nested_key(event, dict_path),
                 match_parser=self,
-                team_id=event["team"]["id"]
+                event=event
             )
             features.extend(vals)
         self.tokenized_event.iloc[starting_index: starting_index + total_num_of_features] = features
