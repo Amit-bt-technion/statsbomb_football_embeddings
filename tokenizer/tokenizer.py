@@ -23,7 +23,7 @@ class Tokenizer:
         except FileNotFoundError:
             logger.error("json file not found!")
 
-        self.vector_size = 85
+        self.vector_size = 122
         self.tokenized_events_matrix = pd.DataFrame(columns=[f'col_{i}' for i in range(self.vector_size)], dtype=float)
         self.match_parser = MatchEventsParser(
             common_features_start_index,
@@ -31,11 +31,9 @@ class Tokenizer:
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
-        for i, event in enumerate(self.data):
+        for event in self.data:
             tokenized_event = self.match_parser.parse_event(event)
-            print(f"~~~~~~~~~~~~ {i}")
             if tokenized_event is not None:
-                print(tokenized_event)
                 self.tokenized_events_matrix.loc[len(self.tokenized_events_matrix)] = tokenized_event
 
         return self.tokenized_events_matrix
