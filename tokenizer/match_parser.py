@@ -27,8 +27,8 @@ class MatchEventsParser:
             36: self.lineup_handler,
         }
 
-    def parse_event(self, event: dict) -> Union[pd.Series, None]:
-        self.tokenized_event = pd.Series(0, index=range(self.vector_size), dtype=float)
+    def parse_event(self, event: dict) -> Union[List, None]:
+        self.tokenized_event = [0 for _ in range(self.vector_size)]
         event_id = event["type"]["id"]
         if event_id in self.special_events_mapping:
             self.special_events_mapping[event_id](event)
@@ -45,13 +45,13 @@ class MatchEventsParser:
         :param event: a single event loaded from match json file.
         :return: a pandas series of length self.num_of_common_features that stores the normalized values after parsing.
         """
-        features = pd.Series(0.0, index=range(self.num_of_common_features))
+        features = [0 for _ in range(self.num_of_common_features)]
         for i, (dict_path, feature_parser) in enumerate(common_features_parsers.items()):
             val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
-            features.iloc[i] = val
+            features[i] = val
 
         end_index = self.common_features_start_index + self.num_of_common_features
-        self.tokenized_event.iloc[self.common_features_start_index: end_index] = features
+        self.tokenized_event[self.common_features_start_index: end_index] = features
         return features
 
     def specific_event_parser(self, event: dict, event_id: int):
@@ -76,7 +76,7 @@ class MatchEventsParser:
                 event=event
             )
             features.extend(vals)
-        self.tokenized_event.iloc[starting_index: starting_index + total_num_of_features] = features
+        self.tokenized_event[starting_index: starting_index + total_num_of_features] = features
         return features
 
     # **************************************    Special event_handlers     ******************************************

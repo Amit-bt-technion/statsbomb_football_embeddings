@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 from urllib.request import urlopen
-from typing import List, Union
+from typing import List
 from tokenizer.match_parser import MatchEventsParser
 from tokenizer import logger, common_features_start_index, vector_size
 
@@ -23,7 +23,7 @@ class Tokenizer:
         except FileNotFoundError:
             logger.error("json file not found!")
 
-        self.tokenized_events_matrix = pd.DataFrame(columns=[f'col_{i}' for i in range(vector_size)], dtype=float)
+        self.tokenized_events_matrix = []
         self.match_parser = MatchEventsParser(
             common_features_start_index,
             vector_size
@@ -33,6 +33,6 @@ class Tokenizer:
         for event in self.data:
             tokenized_event = self.match_parser.parse_event(event)
             if tokenized_event is not None:
-                self.tokenized_events_matrix.loc[len(self.tokenized_events_matrix)] = tokenized_event
+                self.tokenized_events_matrix.append(tokenized_event)
 
-        return self.tokenized_events_matrix
+        return pd.DataFrame(self.tokenized_events_matrix)

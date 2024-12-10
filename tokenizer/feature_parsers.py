@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Any, Union
-import pandas as pd
 
-
-# Feature Classes definitions
 
 class FeatureParser(ABC):
     def __init__(self, name: str):
@@ -100,7 +97,7 @@ class FreezeFrameFeaturesParser(FeatureParser):
             y_loc = self.y_loc_parser.get_normalized(player_obj["location"][1])
             features.extend([player_pos, x_loc, y_loc, self.is_teammate_parser.get_normalized(is_teammate)])
 
-        # filling the list with trailing 0s to match the length of num_of_players * 4 to match pd.Series length
+        # filling the list with trailing 0s to match the length of num_of_players * 4 to match range length
         features += [0] * ((4 * self.num_of_players) - len(features))
         return features
 
