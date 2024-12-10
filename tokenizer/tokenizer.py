@@ -3,7 +3,7 @@ import pandas as pd
 from urllib.request import urlopen
 from typing import List, Union
 from tokenizer.match_parser import MatchEventsParser
-from tokenizer import logger, common_features_start_index
+from tokenizer import logger, common_features_start_index, vector_size
 
 # ************************************************************************************************************
 #                                           Tokenizer Class
@@ -23,11 +23,10 @@ class Tokenizer:
         except FileNotFoundError:
             logger.error("json file not found!")
 
-        self.vector_size = 122
-        self.tokenized_events_matrix = pd.DataFrame(columns=[f'col_{i}' for i in range(self.vector_size)], dtype=float)
+        self.tokenized_events_matrix = pd.DataFrame(columns=[f'col_{i}' for i in range(vector_size)], dtype=float)
         self.match_parser = MatchEventsParser(
             common_features_start_index,
-            self.vector_size
+            vector_size
         )
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
