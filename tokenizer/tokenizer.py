@@ -23,7 +23,9 @@ class Tokenizer:
         except FileNotFoundError:
             logger.error("json file not found!")
 
+        self.path = path
         self.tokenized_events_matrix = []
+        self.tokenized_events_dataframe = None
         self.match_parser = MatchEventsParser(
             common_features_start_index,
             vector_size
@@ -35,4 +37,13 @@ class Tokenizer:
             if tokenized_event is not None:
                 self.tokenized_events_matrix.append(tokenized_event)
 
-        return pd.DataFrame(self.tokenized_events_matrix)
+        self.tokenized_events_dataframe = pd.DataFrame(self.tokenized_events_matrix)
+        return self.tokenized_events_dataframe
+
+    def export_to_csv(self, path='./'):
+        if path[-1] != '/':
+            path = f"{path}/"
+        self.tokenized_events_dataframe.to_csv(f"{path}{self._get_match_file_name()}.csv")
+
+    def _get_match_file_name(self):
+        return self.path.split('/')[-1].split('.')[0]
