@@ -81,5 +81,5 @@ if __name__ == "__main__":
     for match in matches:
         tokenizer = Tokenizer(match, True)
         tokenizer.get_tokenized_match_events()
-        tokenizer.export_to_csv("matches/")
+        # tokenizer.export_to_csv("matches/")
 
