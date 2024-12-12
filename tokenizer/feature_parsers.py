@@ -32,7 +32,7 @@ class RangeFeatureParser(FeatureParser):
 class CategoricalFeatureParser(FeatureParser):
     def __init__(self, name: str, categories: List[Any]):
         super().__init__(name)
-        self.categories = {value: index + 1 for index, value in enumerate(categories)}
+        self.categories = {value: index + 1 for index, value in enumerate(sorted(categories))}
         self.num_categories = len(categories)
 
     def get_normalized(self, val, **kwargs):
