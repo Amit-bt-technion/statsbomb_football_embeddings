@@ -1,10 +1,5 @@
 import unittest
-from tokenizer import (
-    common_features_parsers,
-    event_types_mapping,
-    vector_size,
-    common_features_start_index
-)
+from tokenizer import event_types_mapping,  vector_size
 # important - test no intersecting intervals between index ranges
 
 
@@ -20,7 +15,7 @@ class TestMainConfig(unittest.TestCase):
         tests that the indexes of the target features in the vector do not intersect and sum up to vector length and
         that all indexes belong to a range
         """
-        intervals = [(common_features_start_index, common_features_start_index + len(common_features_parsers), )]
+        intervals = []
         for config in event_types_mapping.values():
             num_of_features = len(config["feature_parsers"])
             num_of_special_features = config.get("num_of_special_features", 0)
