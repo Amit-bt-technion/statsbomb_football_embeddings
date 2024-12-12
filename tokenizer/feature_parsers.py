@@ -37,9 +37,9 @@ class CategoricalFeatureParser(FeatureParser):
         return self.categories.get(val, 0) / self.num_categories
 
 
-class MinuteFeatureParser(CategoricalFeatureParser):
-    def __init__(self, name: str, categories: List[Any]):
-        super().__init__(name, categories)
+class MinuteFeatureParser(RangeFeatureParser):
+    def __init__(self, name: str, min_value: float, max_value: float) -> None:
+        super().__init__(name, min_value, max_value)
 
     def get_normalized(self, val: float, **kwargs) -> Union[float, List[float]]:
         """
@@ -54,7 +54,7 @@ class MinuteFeatureParser(CategoricalFeatureParser):
         elif period <= 4:
             val = val - 90 - ((period - 3) * 15)
         elif period == 5:
-            val = max(self.categories)
+            val = self.max_value
         return [super().get_normalized(val)]
 
 

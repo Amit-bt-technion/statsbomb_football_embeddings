@@ -39,7 +39,7 @@ event_types_mapping = {
             "second": CategoricalFeatureParser("second", [i for i in range(0, 60)])
         },
         "special_parsers": {
-            "minute": MinuteFeatureParser("minute", [i for i in range(0, 61)]),
+            "minute": MinuteFeatureParser("minute", 0, 60),
         },
         "num_of_special_features": 1
 
