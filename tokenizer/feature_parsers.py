@@ -44,6 +44,12 @@ class MinuteFeatureParser(CategoricalFeatureParser):
         super().__init__(name, categories)
 
     def get_normalized(self, val: float, **kwargs) -> Union[float, List[float]]:
+        """
+        calculates a normalized value of the minute of the event as an offset from period start.
+        :param val: a value representing the minute of the event.
+        :param kwargs['event']: the pass event from which the minute is parsed
+        :return: the normalized value of the event minute
+        """
         period = int(kwargs["event"]["period"])
         if period <= 2:
             val = val - (45 * (period - 1))
