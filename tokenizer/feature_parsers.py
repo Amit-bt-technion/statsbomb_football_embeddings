@@ -39,6 +39,21 @@ class CategoricalFeatureParser(FeatureParser):
         return self.categories.get(val, 0) / self.num_categories
 
 
+class MinuteFeatureParser(CategoricalFeatureParser):
+    def __init__(self, name: str, categories: List[Any]):
+        super().__init__(name, categories)
+
+    def get_normalized(self, val: float, **kwargs) -> Union[float, List[float]]:
+        period = int(kwargs["event"]["period"])
+        if period <= 2:
+            val = val - (45 * (period - 1))
+        elif period <= 4:
+            val = val - 90 - ((period - 3) * 15)
+        elif period == 5:
+            val = max(self.categories)
+        return [super().get_normalized(val)]
+
+
 class PassRecipientFeatureParser(FeatureParser):
     def __init__(self, name: str):
         super().__init__(name)

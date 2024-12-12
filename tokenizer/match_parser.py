@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import List, Self, Union
 
-from tokenizer import common_features_parsers, event_types_mapping
+from tokenizer import event_types_mapping
 from tokenizer.utils.helper_functions import get_value_of_nested_key
 from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
 
@@ -11,11 +11,8 @@ player_position_parser = CategoricalFeatureParser("player position id", [i for i
 class MatchEventsParser:
     def __init__(
         self,
-        common_features_start_index: int,
         vector_size: int,
     ):
-        self.common_features_start_index = common_features_start_index
-        self.num_of_common_features = len(common_features_parsers)
         self.vector_size = vector_size
         self.tokenized_event = None
         self.teams_and_players: dict[int, dict] = {}
@@ -34,33 +31,20 @@ class MatchEventsParser:
             self.special_events_mapping[event_id](event)
         if event_types_mapping[event_id]["ignore_event_type"]:
             return None
-        self.parse_common_event_features(event)
-        self.specific_event_parser(event, event_id)
+        self.tokenize_event(event, event_id)
         return self.tokenized_event
 
-    # **************************************    Feature Parsers     ******************************************
-    def parse_common_event_features(self, event: dict):
-        """
-        parsers the keys in the event object that are common and exist for every event.
-        :param event: a single event loaded from match json file.
-        :return: a pandas series of length self.num_of_common_features that stores the normalized values after parsing.
-        """
-        features = [0 for _ in range(self.num_of_common_features)]
-        for i, (dict_path, feature_parser) in enumerate(common_features_parsers.items()):
-            val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
-            features[i] = val
 
-        end_index = self.common_features_start_index + self.num_of_common_features
-        self.tokenized_event[self.common_features_start_index: end_index] = features
-        return features
-
-    def specific_event_parser(self, event: dict, event_id: int):
-        event_mapping = event_types_mapping[event_id]
+    def tokenize_event(self, event: dict, event_id: int, parse_common:bool = True):
+        if parse_common:
+            event_mapping = event_types_mapping["common"]
+        else:
+            event_mapping = event_types_mapping[event_id]
         starting_index = event_mapping["starting_index"]
         parsers = event_mapping["feature_parsers"]
         # calculate total number of features in the specific event's range
         total_num_of_features = len(parsers) + event_mapping.get("num_of_special_features", 0)
-        features = []
+        features = [0 for _ in range(total_num_of_features)]
 
         # interating through regular feature parsers
         for dict_path, feature_parser in parsers.items():
@@ -77,7 +61,8 @@ class MatchEventsParser:
             )
             features.extend(vals)
         self.tokenized_event[starting_index: starting_index + total_num_of_features] = features
-        return features
+        if parse_common:
+            self.tokenize_event(event, event_id, parse_common=False)
 
     # **************************************    Special event_handlers     ******************************************
 

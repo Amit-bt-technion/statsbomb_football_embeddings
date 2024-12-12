@@ -3,6 +3,7 @@ from tokenizer.feature_parsers import (
     FeatureParser,
     CategoricalFeatureParser,
     RangeFeatureParser,
+    MinuteFeatureParser,
     PassRecipientFeatureParser,
     FreezeFrameFeaturesParser
 )
@@ -13,10 +14,36 @@ logger = logging.getLogger(__name__)
 #                                           Parsers Mapping
 # ************************************************************************************************************
 vector_size = 122
-common_features_start_index = 0
 num_of_players_in_freeze_frame = 10
+event_ids = [2, 3, 4, 5, 6, 8, 9, 10, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 33, 34, 35, 36, 37,
+             38, 39, 40, 41, 42, 43]
 
 event_types_mapping = {
+    # common features
+    "common": {
+        "ignore_event_type": False,
+        "starting_index": 0,
+        "feature_parsers": {
+            "type.id": CategoricalFeatureParser("type", event_ids),
+            "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
+            "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
+            "team.id": CategoricalFeatureParser("team", [0, 1]),
+            "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
+            "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
+            "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
+            "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
+            "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
+            "out": CategoricalFeatureParser("out", [0, 1]),
+            "counterpress": CategoricalFeatureParser("counterpress", [0, 1]),
+            "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
+            "second": CategoricalFeatureParser("second", [i for i in range(0, 60)])
+        },
+        "special_parsers": {
+            "minute": MinuteFeatureParser("minute", [i for i in range(0, 61)]),
+        },
+        "num_of_special_features": 1
+
+    },
     # ball recovery event
     2: {
         "ignore_event_type": False,
@@ -314,22 +341,4 @@ event_types_mapping = {
             "carry.end_location[1]": RangeFeatureParser("carry end location y", 0, 80),
         }
     },
-}
-
-common_features_parsers = {
-    "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
-    # TODO: awaiting distribution exploration
-    "minute": CategoricalFeatureParser("minute", [i for i in range(0, 100)]),
-    "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
-    "type.id": CategoricalFeatureParser("type", [key for key in event_types_mapping.keys()]),
-    "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
-    "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
-    "team.id": CategoricalFeatureParser("team", [0, 1]),
-    "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
-    "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
-    "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
-    "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
-    "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
-    "out": CategoricalFeatureParser("out", [0, 1]),
-    "counterpress": CategoricalFeatureParser("counterpress", [0, 1]),
 }

@@ -3,7 +3,7 @@ import pandas as pd
 from urllib.request import urlopen
 from typing import List
 from tokenizer.match_parser import MatchEventsParser
-from tokenizer import logger, common_features_start_index, vector_size
+from tokenizer import logger, vector_size
 
 # ************************************************************************************************************
 #                                           Tokenizer Class
@@ -26,10 +26,7 @@ class Tokenizer:
         self.path = path
         self.tokenized_events_matrix = []
         self.tokenized_events_dataframe = None
-        self.match_parser = MatchEventsParser(
-            common_features_start_index,
-            vector_size
-        )
+        self.match_parser = MatchEventsParser(vector_size)
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
         for event in self.data:
