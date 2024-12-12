@@ -3,6 +3,7 @@ from parameterized import parameterized
 from tokenizer.feature_parsers import (
     CategoricalFeatureParser,
     RangeFeatureParser,
+    MinuteFeatureParser,
     PassRecipientFeatureParser,
     FreezeFrameFeaturesParser
 )
@@ -38,6 +39,29 @@ class TestTokenizer(unittest.TestCase):
     def test_range_feature_parser(self, min_val, max_val, test_val, expected):
         parser = RangeFeatureParser("test parser", min_val, max_val)
         self.assertEquals(parser.get_normalized(test_val), expected)
+
+    @parameterized.expand([
+        (15, {"period": 1}, 0.25),
+        (60, {"period": 2}, 0.25),
+        (105, {"period": 3}, 0.25),
+        (120, {"period": 4}, 0.25),
+        (24, {"period": 1}, 0.4),
+        (69, {"period": 2}, 0.4),
+        (114, {"period": 3}, 0.4),
+        (129, {"period": 4}, 0.4),
+        (45, {"period": 1}, 0.75),
+        (90, {"period": 2}, 0.75),
+        (105, {"period": 3}, 0.25),
+        (120, {"period": 4}, 0.25),
+        (60, {"period": 1}, 1),
+        (75, {"period": 1}, 1),
+        (60, {"period": 2}, 0.25),
+        (75, {"period": 2}, 0.5),
+    ])
+    def test_minute_feature_parser(self, val, event, expected):
+        # on the actual parser the top of the range is 60 inclusive, simplified here for easy calculations
+        parser = MinuteFeatureParser("test parser", 0, 60)
+        self.assertEquals(parser.get_normalized(val, event=event), [expected])
 
     def test_pass_recipient_feature_parser(self):
         pass
