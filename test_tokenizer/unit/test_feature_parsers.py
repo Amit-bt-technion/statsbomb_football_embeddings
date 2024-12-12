@@ -26,8 +26,18 @@ class TestTokenizer(unittest.TestCase):
         for i, elem in enumerate(categories):
             self.assertEquals(parser.get_normalized(elem), expected[i])
 
-    def test_range_feature_parser(self):
-        pass
+    @parameterized.expand([
+        (0, 2, 1, 0.5),
+        (100, 200, 100, 0),
+        (60, 80, 75, 0.75),
+        (1, 2, 3, 1),
+        (-3, 3, 0, 0.5),
+        (-2, 2, -3, 0),
+        (0, 120, 48, 0.4)
+    ])
+    def test_range_feature_parser(self, min_val, max_val, test_val, expected):
+        parser = RangeFeatureParser("test parser", min_val, max_val)
+        self.assertEquals(parser.get_normalized(test_val), expected)
 
     def test_pass_recipient_feature_parser(self):
         pass
