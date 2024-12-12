@@ -1,5 +1,5 @@
 import unittest
-from tokenizer import event_types_mapping,  vector_size
+from tokenizer import event_types_mapping,  vector_size, event_ids
 # important - test no intersecting intervals between index ranges
 
 
@@ -9,6 +9,13 @@ class TestMainConfig(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def test_event_ids_exist(self):
+        for event_id in event_ids:
+            self.assertIsNotNone(event_types_mapping[event_id])
+        for event_id in event_types_mapping.keys():
+            if type(event_id) == int:
+                self.assertIn(event_id, event_ids)
 
     def test_index_ranges(self):
         """
