@@ -34,7 +34,6 @@ class MatchEventsParser:
         self.tokenize_event(event, event_id)
         return self.tokenized_event
 
-
     def tokenize_event(self, event: dict, event_id: int, parse_common:bool = True):
         if parse_common:
             event_mapping = event_types_mapping["common"]
@@ -44,7 +43,7 @@ class MatchEventsParser:
         parsers = event_mapping["feature_parsers"]
         # calculate total number of features in the specific event's range
         total_num_of_features = len(parsers) + event_mapping.get("num_of_special_features", 0)
-        features = [0 for _ in range(total_num_of_features)]
+        features = []
 
         # interating through regular feature parsers
         for dict_path, feature_parser in parsers.items():
@@ -63,6 +62,7 @@ class MatchEventsParser:
         self.tokenized_event[starting_index: starting_index + total_num_of_features] = features
         if parse_common:
             self.tokenize_event(event, event_id, parse_common=False)
+        return self.tokenized_event
 
     # **************************************    Special event_handlers     ******************************************
 
