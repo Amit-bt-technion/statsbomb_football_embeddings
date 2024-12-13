@@ -15,8 +15,16 @@ logger = logging.getLogger(__name__)
 # ************************************************************************************************************
 vector_size = 121
 num_of_players_in_freeze_frame = 10
-event_ids = [2, 3, 4, 5, 6, 8, 9, 10, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 33, 34, 35, 36, 37,
-             38, 39, 40, 41, 42, 43]
+event_ids = {
+    'ball_recovery': 2, 'dispossessed': 3, 'duel': 4, 'camera_on': 5, 'block': 6,
+    'offside': 8, 'clearance': 9, 'interception': 10, 'dribble': 14, 'shot': 16,
+    'pressure': 17, 'half_start': 18, 'substitution': 19, 'own_goal': 20, 'foul_won': 21,
+    'foul_committed': 22, 'goal_keeper': 23, 'bad_behavior': 24, 'own_goal_for': 25,
+    'player_on': 26, 'player_off': 27, 'shield': 28, 'pass': 30, '50_50': 33,
+    'half_end': 34, 'starting_xi': 35, 'tactical_shift': 36, 'error': 37, 'miscontrol': 38,
+    'dribbled_past': 39, 'injury_stoppage': 40, 'referee_ball_drop': 41, 'ball_receipt': 42, 'carry': 43
+}
+
 
 event_types_mapping = {
     # common features
@@ -24,7 +32,7 @@ event_types_mapping = {
         "ignore_event_type": False,
         "starting_index": 0,
         "feature_parsers": {
-            "type.id": CategoricalFeatureParser("type", event_ids),
+            "type.id": CategoricalFeatureParser("type", list(event_ids.values())),
             "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
             "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
             "team.id": CategoricalFeatureParser("team", [0, 1]),
@@ -280,11 +288,13 @@ event_types_mapping = {
         "starting_index": -1,
         "feature_parsers": {}
     },
+    # starting xi event
     35: {
         "ignore_event_type": True,
         "starting_index": -1,
         "feature_parsers": {}
     },
+    # tactical shift event
     36: {
         "ignore_event_type": True,
         "starting_index": -1,
@@ -324,7 +334,7 @@ event_types_mapping = {
         "starting_index": 65,
         "feature_parsers": {}
     },
-    # ball recipt event
+    # ball receipt event
     42: {
         "ignore_event_type": False,
         "starting_index": 65,
