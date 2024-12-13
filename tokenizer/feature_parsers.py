@@ -80,9 +80,9 @@ class PassRecipientFeatureParser(FeatureParser):
 
 
 class FreezeFrameFeaturesParser(FeatureParser):
-    def __init__(self, name: str, num_of_features):
+    def __init__(self, name: str, num_of_players):
         super().__init__(name)
-        self.num_of_players = num_of_features
+        self.num_of_players = num_of_players
         self.x_loc_parser = RangeFeatureParser("x location parser", 0, 120)
         self.y_loc_parser = RangeFeatureParser("Y location parser", 0, 80)
         self.is_teammate_parser = CategoricalFeatureParser("is_teammate", [0, 1])
