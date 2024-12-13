@@ -50,7 +50,7 @@ event_types_mapping = {
             "possession_team.id": TeamIdParser("possession_team"),
             "position.id": PlayerPositionFeatureParser("position"),
         },
-        "num_of_special_features": 1
+        "num_of_special_features": 4
 
     },
     # ball recovery event
