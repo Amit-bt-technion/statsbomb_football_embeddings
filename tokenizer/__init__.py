@@ -3,8 +3,9 @@ from tokenizer.feature_parsers import (
     FeatureParser,
     CategoricalFeatureParser,
     RangeFeatureParser,
+    TeamIdParser,
     MinuteFeatureParser,
-    PassRecipientFeatureParser,
+    PlayerPositionFeatureParser,
     FreezeFrameFeaturesParser
 )
 
@@ -33,10 +34,7 @@ event_types_mapping = {
         "starting_index": 0,
         "feature_parsers": {
             "type.id": CategoricalFeatureParser("type", list(event_ids.values())),
-            "possession_team.id": CategoricalFeatureParser("possession_team", [0, 1]),
             "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
-            "team.id": CategoricalFeatureParser("team", [0, 1]),
-            "position.id": CategoricalFeatureParser("position", [i for i in range(1, 26)]),
             "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
             "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
             "duration": RangeFeatureParser("duration", min_value=0, max_value=3),
@@ -48,6 +46,9 @@ event_types_mapping = {
         },
         "special_parsers": {
             "minute": MinuteFeatureParser("minute", 0, 60),
+            "team.id": TeamIdParser("team"),
+            "possession_team.id": TeamIdParser("possession_team"),
+            "position.id": PlayerPositionFeatureParser("position"),
         },
         "num_of_special_features": 1
 
@@ -270,7 +271,7 @@ event_types_mapping = {
             "pass.technique.id": CategoricalFeatureParser("pass technique", [104, 105, 107, 108]),
         },
         "special_parsers": {
-            "pass.recipient.id": PassRecipientFeatureParser("player position"),
+            "pass.recipient.id": PlayerPositionFeatureParser("player position"),
         },
         "num_of_special_features": 1
     },
