@@ -5,7 +5,7 @@ from tokenizer.feature_parsers import (
     CategoricalFeatureParser,
     RangeFeatureParser,
     MinuteFeatureParser,
-    PassRecipientFeatureParser,
+    PlayerPositionFeatureParser,
     FreezeFrameFeaturesParser
 )
 
@@ -74,7 +74,7 @@ class TestTokenizer(unittest.TestCase):
         (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 40}},   None),
     ])
     def test_pass_recipient_feature_parser(self, player_id, teams_and_players, event, expected):
-        parser = PassRecipientFeatureParser("test parser")
+        parser = PlayerPositionFeatureParser("test parser")
         match_parser = MatchEventsParser(1)
         match_parser.teams_and_players = teams_and_players
         if expected is None:

@@ -37,6 +37,22 @@ class CategoricalFeatureParser(FeatureParser):
         return self.categories.get(val, 0) / self.num_categories
 
 
+class TeamIdParser(CategoricalFeatureParser):
+    def __init__(self, name: str) -> None:
+        super().__init__(name, [])
+
+    def get_normalized(self, val: float, **kwargs) -> List[float]:
+        """
+        provides binary classification for team ids, that remains constant throughout the match
+        :param val: a value representing the id of the team.
+        :param kwargs['match_parser']: a MatchEventParser instance of the current match with an initialized
+        teams_and_players property
+        :return: a category for the team id.
+        """
+        super().__init__(self.feature_name, kwargs["match_parser"].teams_and_players.keys())
+        return [super().get_normalized(val)]
+
+
 class MinuteFeatureParser(RangeFeatureParser):
     def __init__(self, name: str, min_value: float, max_value: float) -> None:
         super().__init__(name, min_value, max_value)
@@ -58,7 +74,7 @@ class MinuteFeatureParser(RangeFeatureParser):
         return [super().get_normalized(val)]
 
 
-class PassRecipientFeatureParser(FeatureParser):
+class PlayerPositionFeatureParser(FeatureParser):
     def __init__(self, name: str):
         super().__init__(name)
 
@@ -119,4 +135,3 @@ class FreezeFrameFeaturesParser(FeatureParser):
         # filling the list with trailing 0s to match the length of num_of_players * 4 to match range length
         features += [0] * ((4 * self.num_of_players) - len(features))
         return features
-
