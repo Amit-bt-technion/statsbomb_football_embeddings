@@ -1,5 +1,6 @@
 import unittest
 from parameterized import parameterized
+from tokenizer.match_parser import MatchEventsParser
 from tokenizer.feature_parsers import (
     CategoricalFeatureParser,
     RangeFeatureParser,
@@ -63,8 +64,24 @@ class TestTokenizer(unittest.TestCase):
         parser = MinuteFeatureParser("test parser", 0, 60)
         self.assertEquals(parser.get_normalized(val, event=event), [expected])
 
-    def test_pass_recipient_feature_parser(self):
-        pass
+    @parameterized.expand([
+        (903, {1827: {905: 0.833, 902: 1, 903: 0.2, 901: 0.15}},    {"team": {"id": 1827}}, 0.2),
+        (22,  {1: {22: 0.833, 23: 1}, 2: {22: 0.1, 23: 0.5}},       {"team": {"id": 2}},    0.1),
+        (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 2}},    -1),
+        (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 40}},   -1),
+        (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 40}},   -1),
+        (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 40}},   -1),
+        (4,   {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},       {"team": {"id": 40}},   -1),
+    ])
+    def test_pass_recipient_feature_parser(self, player_id, teams_and_players, event, expected):
+        parser = PassRecipientFeatureParser("test parser")
+        match_parser = MatchEventsParser(1)
+        match_parser.teams_and_players = teams_and_players
+        if expected == -1:
+            with self.assertRaises(KeyError):
+                self.assertEquals(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
+        else:
+            self.assertEquals(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
 
     def test_freeze_frame_features_parser(self):
         pass
