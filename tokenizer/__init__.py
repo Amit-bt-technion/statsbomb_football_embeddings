@@ -43,7 +43,7 @@ event_types_mapping = {
             "counterpress": CategoricalFeatureParser("counterpress", [0, 1]),
             "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
             "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
-            "position.id": CategoricalFeatureParser("position", [i for i in range(1,25)])
+            "position.id": CategoricalFeatureParser("position", [i for i in range(1,26)])
         },
         "special_parsers": {
             "minute": MinuteFeatureParser("minute", 0, 60),
