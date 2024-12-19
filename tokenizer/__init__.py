@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 #                                           Parsers Mapping
 # ************************************************************************************************************
 vector_size = 122
-num_of_players_in_freeze_frame = 10
+num_of_players_in_freeze_frame = 22
 event_ids = {
     'ball_recovery': 2, 'dispossessed': 3, 'duel': 4, 'camera_on': 5, 'block': 6,
     'offside': 8, 'clearance': 9, 'interception': 10, 'dribble': 14, 'shot': 16,

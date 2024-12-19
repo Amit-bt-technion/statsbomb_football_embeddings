@@ -112,26 +112,27 @@ class FreezeFrameFeaturesParser(FeatureParser):
         :param kwargs['event']: the event from which the freeze_frame on the shot event is parsed
         :return:
         """
+        features = [0 for _ in range(2 * self.num_of_players)]
         if type(val) is not list or len(val) == 0:
-            return [0 for i in range(4 * self.num_of_players)]
+            return features
 
         match_parser = kwargs["match_parser"]
         event = kwargs["event"]
         team_id = event["team"]["id"]
         teams_and_players = match_parser.teams_and_players
         opponent_team_id = next(num for num in teams_and_players.keys() if num != team_id)
-        features = []
 
         num_of_players = min(self.num_of_players, len(val))
         for player_obj in val[:num_of_players]:
             is_teammate = player_obj["teammate"]
             player_id = player_obj["player"]["id"]
-            # player position is normalized on players_and_positions dict
-            player_pos = teams_and_players[team_id if is_teammate else opponent_team_id][player_id]
+            team = team_id if is_teammate else opponent_team_id
+            team_index = list(teams_and_players).index(team)
+            player_index = list(teams_and_players[team]).index(player_id)
+
             x_loc = self.x_loc_parser.get_normalized(player_obj["location"][0])
             y_loc = self.y_loc_parser.get_normalized(player_obj["location"][1])
-            features.extend([player_pos, x_loc, y_loc, self.is_teammate_parser.get_normalized(is_teammate)])
+            features_index_start = (team_index * 2 * 11) + (2 * player_index)
+            features[features_index_start: features_index_start + 2] = [x_loc, y_loc]
 
-        # filling the list with trailing 0s to match the length of num_of_players * 4 to match range length
-        features += [0] * ((4 * self.num_of_players) - len(features))
         return features
