@@ -48,7 +48,7 @@ event_types_mapping = {
             "minute": MinuteFeatureParser("minute", 0, 60),
             "team.id": TeamIdParser("team"),
             "possession_team.id": TeamIdParser("possession_team"),
-            "position.id": PlayerPositionFeatureParser("position"),
+            "player.id": PlayerPositionFeatureParser("position"),
         },
         "num_of_special_features": 4
 
