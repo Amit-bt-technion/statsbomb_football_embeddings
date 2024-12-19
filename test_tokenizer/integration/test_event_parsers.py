@@ -33,7 +33,7 @@ class TestEventParsers(unittest.TestCase):
             "counterpress": True,
             "period": 2,
             "second": 11,
-            "position": {"id": 32}, # is this value on purpose? no such position ID
+            "position": {"id": 13}, # is this value on purpose? no such position ID
             "minute": 75,
             "team": {"id": 333},
             "possession_team": {"id": 222},
@@ -51,7 +51,7 @@ class TestEventParsers(unittest.TestCase):
             "counterpress": False,
             "period": 4,
             "second": 50,
-            "position": {"id": 31}, # is this value on purpose? no such position ID
+            "position": {"id": 21}, # is this value on purpose? no such position ID
             "minute": 117,
             "team": {"id": 333},
             "possession_team": {"id": 333},
