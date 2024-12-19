@@ -16,22 +16,27 @@ class MatchEventsParser:
         self.vector_size = vector_size
         self.tokenized_event = None
         self.teams_and_players: dict[int, dict] = {}
-        self.special_events_mapping = {
+        self.change_teams_and_players = {
             19: self.substitution_event_handler,
             # starting_xi event type
             35: self.lineup_handler,
             # tactical_shift event type
             36: self.lineup_handler,
         }
+        self.cleanup_teams_and_players = {
+            19: self.substitution_event_cleaner
+        }
 
     def parse_event(self, event: dict) -> Union[List, None]:
         self.tokenized_event = [0 for _ in range(self.vector_size)]
         event_id = event["type"]["id"]
-        if event_id in self.special_events_mapping:
-            self.special_events_mapping[event_id](event)
+        if event_id in self.change_teams_and_players:
+            self.change_teams_and_players[event_id](event)
         if event_types_mapping[event_id]["ignore_event_type"]:
             return None
         self.tokenize_event(event, event_id)
+        if event_id in self.cleanup_teams_and_players:
+            self.cleanup_teams_and_players[event_id](event)
         return self.tokenized_event
 
     def tokenize_event(self, event: dict, event_id: int, parse_common:bool = True):
@@ -86,5 +91,13 @@ class MatchEventsParser:
         in_player_id = event["substitution"]["replacement"]["id"]
         # retaining the previous players' position as there is no attribute in the event that indicates a change
         prev_position = self.teams_and_players[team_id][out_player_id]
-        # del self.teams_and_players[team_id][out_player_id]
         self.teams_and_players[team_id][in_player_id] = prev_position
+
+    def substitution_event_cleaner(self, event: dict):
+        """
+        this method is to be invoked alongside the event parser to clean the teams_and_players property.
+        :param event: a single substituted event loaded from match json file.
+        """
+        team_id = event["team"]["id"]
+        out_player_id = event["player"]["id"]
+        del self.teams_and_players[team_id][out_player_id]

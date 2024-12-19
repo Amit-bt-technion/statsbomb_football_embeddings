@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # ************************************************************************************************************
 #                                           Parsers Mapping
 # ************************************************************************************************************
-vector_size = 122
+vector_size = 126
 num_of_players_in_freeze_frame = 22
 event_ids = {
     'ball_recovery': 2, 'dispossessed': 3, 'duel': 4, 'camera_on': 5, 'block': 6,
@@ -151,7 +151,7 @@ event_types_mapping = {
         "special_parsers": {
             "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame", num_of_players_in_freeze_frame),
         },
-        "num_of_special_features": num_of_players_in_freeze_frame * 4
+        "num_of_special_features": num_of_players_in_freeze_frame * 2
     },
     # pressure event
     17: {
