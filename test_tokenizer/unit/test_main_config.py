@@ -11,11 +11,11 @@ class TestMainConfig(unittest.TestCase):
         pass
 
     def test_event_ids_exist(self):
-        for event_id in event_ids:
+        for event_id in event_ids.values():
             self.assertIsNotNone(event_types_mapping[event_id])
         for event_id in event_types_mapping.keys():
             if type(event_id) == int:
-                self.assertIn(event_id, event_ids)
+                self.assertIn(event_id, event_ids.values())
 
     def test_index_ranges(self):
         """
