@@ -86,5 +86,5 @@ class MatchEventsParser:
         in_player_id = event["substitution"]["replacement"]["id"]
         # retaining the previous players' position as there is no attribute in the event that indicates a change
         prev_position = self.teams_and_players[team_id][out_player_id]
-        del self.teams_and_players[team_id][out_player_id]
+        # del self.teams_and_players[team_id][out_player_id]
         self.teams_and_players[team_id][in_player_id] = prev_position
