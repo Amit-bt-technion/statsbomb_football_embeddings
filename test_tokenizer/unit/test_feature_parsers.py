@@ -26,7 +26,7 @@ class TestTokenizer(unittest.TestCase):
     def test_categorical_feature_parser(self, categories, expected):
         parser = CategoricalFeatureParser("test parser", categories)
         for i, elem in enumerate(categories):
-            self.assertEquals(parser.get_normalized(elem), expected[i])
+            self.assertEqual(parser.get_normalized(elem), expected[i])
 
     @parameterized.expand([
         (0, 2, 1, 0.5),
@@ -39,7 +39,7 @@ class TestTokenizer(unittest.TestCase):
     ])
     def test_range_feature_parser(self, min_val, max_val, test_val, expected):
         parser = RangeFeatureParser("test parser", min_val, max_val)
-        self.assertEquals(parser.get_normalized(test_val), expected)
+        self.assertEqual(parser.get_normalized(test_val), expected)
 
     @parameterized.expand([
         (15, {"period": 1}, 0.25),
@@ -62,7 +62,7 @@ class TestTokenizer(unittest.TestCase):
     def test_minute_feature_parser(self, val, event, expected):
         # on the actual parser the top of the range is 60 inclusive, simplified here for easy calculations
         parser = MinuteFeatureParser("test parser", 0, 60)
-        self.assertEquals(parser.get_normalized(val, event=event), [expected])
+        self.assertEqual(parser.get_normalized(val, event=event), [expected])
 
     @parameterized.expand([
         (903, {1827: {905: 0.833, 902: 1, 903: 0.2, 901: 0.15}},    {"team": {"id": 1827}}, 0.2),
@@ -81,7 +81,7 @@ class TestTokenizer(unittest.TestCase):
             with self.assertRaises(KeyError):
                 parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected]
         else:
-            self.assertEquals(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
+            self.assertEqual(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
 
     @parameterized.expand([
         (1, 
@@ -118,5 +118,5 @@ class TestTokenizer(unittest.TestCase):
             with self.assertRaises(KeyError):
                 parser.get_normalized(freeze_frame, match_parser=match_parser, event=event)
         else:
-            self.assertEquals(parser.get_normalized(freeze_frame, match_parser=match_parser, event=event), expected)
+            self.assertEqual(parser.get_normalized(freeze_frame, match_parser=match_parser, event=event), expected)
         
