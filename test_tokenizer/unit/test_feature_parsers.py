@@ -84,38 +84,33 @@ class TestTokenizer(unittest.TestCase):
             self.assertEqual(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
 
     @parameterized.expand([
-        (1, 
-         [{"player": {"id": 3}, "teammate": False, "location": [30, 60]}],
+        ([{"player": {"id": 3}, "teammate": False, "location": [30, 60]}],
          {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},
          {"team": {"id": 40}},
-         [0.992, 0.25, 0.75, 0.5]),
-        (1,
-         [{"player": {"id": 1}, "teammate": True, "location": [60, 10]}],
+         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.25, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        ([{"player": {"id": 1}, "teammate": True, "location": [60, 10]}],
          {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},
          {"team": {"id": 40}},
-         [0.07, 0.5, 0.125, 1]),
-        (1,
-         [{"player": {"id": 2}, "teammate": False, "location": [150, -30]}],
+         [0.5, 0.125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        ([{"player": {"id": 2}, "teammate": False, "location": [150, -30]}],
          {40: {1: 0.07, 2: 0.82}, 50: {1: 0.992, 2: 0}},
          {"team": {"id": 50}},
-         [0.82, 1, 0, 0.5]),
-        (1,
-         [{"player": {"id": 3}, "teammate": False, "location": [120, 80]}],
+         [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        ([{"player": {"id": 3}, "teammate": False, "location": [120, 80]}],
          {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},
          {"team": {"id": 50}},
          None),
-        (1,
-         [{"player": {"id": 3}, "teammate": False, "location": [120, 80]}],
+        ([{"player": {"id": 3}, "teammate": False, "location": [120, 80]}],
          {40: {1: 0.07, 2: 0.82}, 50: {3: 0.992, 4: 0}},
          {"team": {"id": 10}},
          None),
     ])
-    def test_freeze_frame_features_parser(self, num_of_players, freeze_frame, teams_and_players, event, expected):
-        parser = FreezeFrameFeaturesParser("test parser", num_of_players)
+    def test_freeze_frame_features_parser(self, freeze_frame, teams_and_players, event, expected):
+        parser = FreezeFrameFeaturesParser("test parser", 22)
         match_parser = MatchEventsParser(1)
         match_parser.teams_and_players = teams_and_players
         if expected is None:
-            with self.assertRaises(KeyError):
+            with self.assertRaises(ValueError):
                 parser.get_normalized(freeze_frame, match_parser=match_parser, event=event)
         else:
             self.assertEqual(parser.get_normalized(freeze_frame, match_parser=match_parser, event=event), expected)
