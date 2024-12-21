@@ -280,3 +280,66 @@ class TestEventParsers(unittest.TestCase):
                 a = vec[cell_index]
                 self.assertEqual(vec[cell_index], 0)
 
+
+    @parameterized.expand([
+        # substitution events - id 19
+        (
+                {1: {11: 0.08, 16: 0.56}, 2: {28: 0.76, 29: 0.92}},
+                {'type': {'id': 19}, 'team': {'id': 2}, 'player': {'id': 29}, 'substitution': {'replacement': {'id': 21}}},
+                {1: {11: 0.08, 16: 0.56}, 2: {28: 0.76, 21: 0.92}},
+        ), (
+                {1: {11: 0.08, 16: 0.56}, 2: {11: 0.08, 16: 0.56}},
+                {'type': {'id': 19}, 'team': {'id': 1}, 'player': {'id': 11}, 'substitution': {'replacement': {'id': 40}}},
+                {1: {40: 0.08, 16: 0.56}, 2: {11: 0.08, 16: 0.56}},
+        ),(
+                {1: {11: 0.08, 16: 0.56}, 2: {28: 0.76, 29: 0.92}},
+                {'type': {'id': 19}, 'team': {'id': 2}, 'player': {'id': 29}, 'substitution': {'replacement': {'id': 29}}},
+                {1: {11: 0.08, 16: 0.56}, 2: {28: 0.76}}, # expecting 29 to be removed from the field
+        ),
+
+        # starting_xi events - id 35
+        (
+                {},
+                {'type': {'id': 35}, 'team': {'id': 2}, 'tactics': {'lineup': [
+                     {'player': {'id': 22}, 'position': {'id': 25},},
+                     {'player': {'id': 23}, 'position': {'id': 14},},
+                 ]}},
+                {2: {22: 1, 23: 0.56}}
+        ), (
+                {2: {22: 1, 23: 0.56}},
+                {'type': {'id': 35}, 'team': {'id': 1}, 'tactics': {'lineup': [
+                     {'player': {'id': 14}, 'position': {'id': 10},},
+                     {'player': {'id': 15}, 'position': {'id': 20},},
+                 ]}},
+                {2: {22: 1, 23: 0.56}, 1: {14: 0.4, 15: 0.8}}
+        ),
+
+        # tactical shift event - id 36
+        (
+                {2: {22: 1, 23: 0.56}, 1: {14: 0.4, 15: 0.8}},
+                {'type': {'id': 36}, 'team': {'id': 1}, 'tactics': {'lineup': [
+                    {'player': {'id': 16}, 'position': {'id': 5}, },
+                    {'player': {'id': 17}, 'position': {'id': 15}, },
+                ]}},
+                {2: {22: 1, 23: 0.56}, 1: {16: 0.2, 17: 0.6}}
+        ), (
+                {2: {22: 1, 23: 0.56}, 1: {14: 0.4, 15: 0.8}},
+                {'type': {'id': 36}, 'team': {'id': 2}, 'tactics': {'lineup': [
+                    {'player': {'id': 16}, 'position': {'id': 5}, },
+                    {'player': {'id': 17}, 'position': {'id': 15}, },
+                ]}},
+                {2: {16: 0.2, 17: 0.6}, 1: {14: 0.4, 15: 0.8}}
+        ),
+    ])
+    def test_teams_and_players(self, prev_lineup, event, expected_lineup):
+        """
+        tests correctness and consistency of MatchEventsParser.teams_and_players after lineup changes
+        """
+        parser.teams_and_players = prev_lineup
+        for key, val in self.common_values_sets[0].items():
+            if event.get(key, None) is None:
+                event[key] = val
+
+        parser.parse_event(event)
+        self.assertEquals(expected_lineup, parser.teams_and_players)
+
