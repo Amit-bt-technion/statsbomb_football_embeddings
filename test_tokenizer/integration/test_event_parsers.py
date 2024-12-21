@@ -63,7 +63,7 @@ class TestEventParsers(unittest.TestCase):
         self.common_values_sets = [common_values_set_1, common_values_set_2]
         self.common_values_expected = [expected_common_set_1, expected_common_set_2]
 
-    """shot, substitution 
+    """shot,  
     bad_behavior, own_goal_for, player_on, player_off, 
     shield, pass, 50_50, half_end, starting_xi, tactical_shift, error, miscontrol, dribbled_past, injury_stoppage, 
     referee_ball_drop, ball_receipt, carry,"""
@@ -197,51 +197,57 @@ class TestEventParsers(unittest.TestCase):
 
         # Goalkeeper events - (team, event_type, event_data, expected_output)
         # Single attribute cases
-        (0, "goalkeeper", {"type": {"id": 25}}, [1 / 14, 0, 0, 0, 0]),  # Team 0, only type specified
-        (1, "goalkeeper", {"outcome": {"id": 47}}, [0, 7 / 18, 0, 0, 0]),  # Team 1, only outcome specified
-        (0, "goalkeeper", {"position": {"id": 42}}, [0, 0, 1 / 3, 0, 0]),  # Team 0, only position specified
+        (0, "goalkeeper", {"type": {"id": 25}}, [1 / 14, 0, 0, 0, 0, 0, 0]),  # Team 0, only type specified
+        (1, "goalkeeper", {"outcome": {"id": 47}}, [0, 7 / 18, 0, 0, 0, 0, 0]),  # Team 1, only outcome specified
+        (0, "goalkeeper", {"position": {"id": 42}}, [0, 0, 1 / 3, 0, 0, 0, 0]),  # Team 0, only position specified
         # Two attributes combinations
-        (1, "goalkeeper", {"type": {"id": 27}, "body_part": {"id": 35}}, [3 / 14, 0, 0, 0, 1 / 7]),  # Team 1, type + body part
-        (0, "goalkeeper", {"position": {"id": 43}, "technique": {"id": 45}}, [0, 0, 2 / 3, 1 / 2, 0]),  # Team 0, position + technique
+        (1, "goalkeeper", {"type": {"id": 27}, "body_part": {"id": 35}}, [3 / 14, 0, 0, 0, 1 / 7, 0, 0]),  # Team 1, type + body part
+        (0, "goalkeeper", {"position": {"id": 43}, "technique": {"id": 45}}, [0, 0, 2 / 3, 1 / 2, 0, 0, 0]),  # Team 0, position + technique
         # Three attributes combinations
         (1, "goalkeeper", {
             "type": {"id": 30},
             "outcome": {"id": 51},
-            "body_part": {"id": 37}
-        }, [6 / 14, 11 / 18, 0, 0, 3 / 7]),  # Team 1, type + outcome + body part
+            "body_part": {"id": 37},
+            "end_location": [80, 80]
+        }, [6 / 14, 11 / 18, 0, 0, 3 / 7, 2/3, 1]),  # Team 1, type + outcome + body part
         (0, "goalkeeper", {
             "outcome": {"id": 53},
             "position": {"id": 44},
-            "technique": {"id": 46}
-        }, [0, 13 / 18, 3 / 3, 2 / 2, 0]),  # Team 0, outcome + position + technique
+            "technique": {"id": 46},
+            "end_location": [0, 0]
+        }, [0, 13 / 18, 3 / 3, 2 / 2, 0, 0, 0]),  # Team 0, outcome + position + technique
         # Four attributes combinations
         (1, "goalkeeper", {
             "type": {"id": 33},
             "outcome": {"id": 56},
             "position": {"id": 42},
-            "technique": {"id": 45}
-        }, [9 / 14, 15 / 18, 1 / 3, 1 / 2, 0]),  # Team 1, all except body part
+            "technique": {"id": 45},
+            "end_location": [12, 72]
+        }, [9 / 14, 15 / 18, 1 / 3, 1 / 2, 0, 0.1, 0.9]),  # Team 1, all except body part
         (0, "goalkeeper", {
             "type": {"id": 109},
             "outcome": {"id": 117},
             "position": {"id": 43},
-            "body_part": {"id": 40}
-        }, [11 / 14, 18 / 18, 2 / 3, 0, 6 / 7]),  # Team 0, all except technique
+            "body_part": {"id": 40},
+            "end_location": [24,  20]
+        }, [11 / 14, 18 / 18, 2 / 3, 0, 6 / 7, 0.2, 0.25]),  # Team 0, all except technique
         # Full combinations
         (1, "goalkeeper", {
             "type": {"id": 114},
             "outcome": {"id": 59},
             "position": {"id": 44},
             "technique": {"id": 46},
-            "body_part": {"id": 41}
-        }, [14 / 14, 17 / 18, 3 / 3, 2 / 2, 7 / 7]),  # Team 1, all attributes maximum values
+            "body_part": {"id": 41},
+            "end_location": [200,  200]
+        }, [14 / 14, 17 / 18, 3 / 3, 2 / 2, 7 / 7, 1, 1]),  # Team 1, all attributes maximum values
         (0, "goalkeeper", {
             "type": {"id": 25},
             "outcome": {"id": 4},
             "position": {"id": 42},
             "technique": {"id": 45},
-            "body_part": {"id": 35}
-        }, [1 / 14, 1 / 18, 1 / 3, 1 / 2, 1 / 7]),  # Team 0, all attributes minimum values
+            "body_part": {"id": 35},
+            "end_location": [-1,  0]
+        }, [1 / 14, 1 / 18, 1 / 3, 1 / 2, 1 / 7, 0, 0]),  # Team 0, all attributes minimum values
 
 
     ])
