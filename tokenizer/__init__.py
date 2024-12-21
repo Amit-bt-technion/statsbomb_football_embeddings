@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # ************************************************************************************************************
 #                                           Parsers Mapping
 # ************************************************************************************************************
-vector_size = 126
+vector_size = 128
 num_of_players_in_freeze_frame = 22
 event_ids = {
     'ball_recovery': 2, 'dispossessed': 3, 'duel': 4, 'camera_on': 5, 'block': 6,
@@ -131,7 +131,7 @@ event_types_mapping = {
     # shot event - setting starting index to the end of the vector
     16: {
         "ignore_event_type": False,
-        "starting_index": 69,
+        "starting_index": 71,
         "feature_parsers": {
             "shot.type.id": CategoricalFeatureParser("shot type", [61, 62, 87, 88]),
             "shot.end_location[0]": RangeFeatureParser("shot end location x", 0, 120),
@@ -212,12 +212,14 @@ event_types_mapping = {
             "goalkeeper.position.id": CategoricalFeatureParser("goalkeeper position", [42, 43, 44]),
             "goalkeeper.technique.id": CategoricalFeatureParser("goalkeeper position", [45, 46]),
             "goalkeeper.body_part.id": CategoricalFeatureParser("goalkeeper body part", [i for i in range(35, 42)]),
+            "goalkeeper.end_location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
+            "goalkeeper.end_location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
         }
     },
     # bad behavior event
     24: {
         "ignore_event_type": False,
-        "starting_index": 43,
+        "starting_index": 45,
         "feature_parsers": {
             "bad_behavior.card.id": CategoricalFeatureParser("bad behavior card", [65, 66, 67]),
         }
@@ -225,19 +227,19 @@ event_types_mapping = {
     # own goal for event
     25: {
         "ignore_event_type": False,
-        "starting_index": 44,
+        "starting_index": 46,
         "feature_parsers": {}
     },
     # player on event
     26: {
         "ignore_event_type": False,
-        "starting_index": 44,
+        "starting_index": 46,
         "feature_parsers": {}
     },
     # player off event
     27: {
         "ignore_event_type": False,
-        "starting_index": 44,
+        "starting_index": 46,
         "feature_parsers": {
             "player_off.permanent": CategoricalFeatureParser("player off permanently", [0, 1]),
         }
@@ -245,13 +247,13 @@ event_types_mapping = {
     # shield event
     28: {
         "ignore_event_type": False,
-        "starting_index": 45,
+        "starting_index": 47,
         "feature_parsers": {}
     },
     # pass event
     30: {
         "ignore_event_type": False,
-        "starting_index": 45,
+        "starting_index": 47,
         "feature_parsers": {
             "pass.type.id": CategoricalFeatureParser("pass type", [i for i in range(61, 68)]),
             "pass.length": RangeFeatureParser("pass length", 0, 120),
@@ -279,7 +281,7 @@ event_types_mapping = {
     # 50-50 event
     33: {
         "ignore_event_type": False,
-        "starting_index": 63,
+        "starting_index": 65,
         "feature_parsers": {
             "50_50.outcome.id": CategoricalFeatureParser("50/50 outcome", [108, 109, 147, 148])
         }
@@ -305,13 +307,13 @@ event_types_mapping = {
     # error event
     37: {
         "ignore_event_type": False,
-        "starting_index": 64,
+        "starting_index": 66,
         "feature_parsers": {}
     },
     # miscontrol
     38: {
         "ignore_event_type": False,
-        "starting_index": 64,
+        "starting_index": 66,
         "feature_parsers": {
             "miscontrol.aerial_won": CategoricalFeatureParser("aerial won", [0, 1]),
         }
@@ -319,13 +321,13 @@ event_types_mapping = {
     # dribbled past event
     39: {
         "ignore_event_type": False,
-        "starting_index": 65,
+        "starting_index": 67,
         "feature_parsers": {}
     },
     # injury stoppage
     40: {
         "ignore_event_type": False,
-        "starting_index": 65,
+        "starting_index": 67,
         "feature_parsers": {
             "injury_stoppage.in_chain": CategoricalFeatureParser("injury stoppage", [0, 1]),
         }
@@ -333,13 +335,13 @@ event_types_mapping = {
     # referee ball drop event
     41: {
         "ignore_event_type": False,
-        "starting_index": 66,
+        "starting_index": 68,
         "feature_parsers": {}
     },
     # ball receipt event
     42: {
         "ignore_event_type": False,
-        "starting_index": 66,
+        "starting_index": 68,
         "feature_parsers": {
             "ball_receipt.outcome.id": CategoricalFeatureParser("ball receipt outcome", [9])
         }
@@ -347,7 +349,7 @@ event_types_mapping = {
     # carry event
     43: {
         "ignore_event_type": False,
-        "starting_index": 67,
+        "starting_index": 69,
         "feature_parsers": {
             "carry.end_location[0]": RangeFeatureParser("carry end location x", 0, 120),
             "carry.end_location[1]": RangeFeatureParser("carry end location y", 0, 80),
