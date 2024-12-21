@@ -20,7 +20,7 @@ event_ids = {
     'ball_recovery': 2, 'dispossessed': 3, 'duel': 4, 'camera_on': 5, 'block': 6,
     'offside': 8, 'clearance': 9, 'interception': 10, 'dribble': 14, 'shot': 16,
     'pressure': 17, 'half_start': 18, 'substitution': 19, 'own_goal': 20, 'foul_won': 21,
-    'foul_committed': 22, 'goal_keeper': 23, 'bad_behavior': 24, 'own_goal_for': 25,
+    'foul_committed': 22, 'goalkeeper': 23, 'bad_behavior': 24, 'own_goal_for': 25,
     'player_on': 26, 'player_off': 27, 'shield': 28, 'pass': 30, '50_50': 33,
     'half_end': 34, 'starting_xi': 35, 'tactical_shift': 36, 'error': 37, 'miscontrol': 38,
     'dribbled_past': 39, 'injury_stoppage': 40, 'referee_ball_drop': 41, 'ball_receipt': 42, 'carry': 43
