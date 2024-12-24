@@ -137,16 +137,16 @@ event_types_mapping = {
             "shot.end_location[0]": RangeFeatureParser("shot end location x", 0, 120),
             "shot.end_location[1]": RangeFeatureParser("shot end location y", 0, 80),
             # after exploration - setting maximum z shot height to 5 meters, the 90th percentile
-            "shot.end_location[2]": RangeFeatureParser("shot end location z", 0, 10),
+            "shot.end_location[2]": RangeFeatureParser("shot end location z", 0, 5),
             "shot.aerial_won": CategoricalFeatureParser("shot aerial won", [0, 1]),
             "shot.follows_dribble": CategoricalFeatureParser("shot follows dribble", [0, 1]),
             "shot.first_time": CategoricalFeatureParser("shot first time", [0, 1]),
             "shot.open_goal": CategoricalFeatureParser("shot open goal", [0, 1]),
             "shot.statsbomb_xg": RangeFeatureParser("shot statsbomb xg", 0, 1),
             "shot.deflected": CategoricalFeatureParser("shot deflected", [0, 1]),
-            "clearance.technique.id": CategoricalFeatureParser("shot technique", [i for i in range(89, 96)]),
-            "clearance.body_part.id": CategoricalFeatureParser("shot body part", [37, 38, 40, 70]),
-            "clearance.outcome.id": CategoricalFeatureParser("shot body part", [96, 97, 98, 99, 100, 101, 115, 116]),
+            "shot.technique.id": CategoricalFeatureParser("shot technique", [i for i in range(89, 96)]),
+            "shot.body_part.id": CategoricalFeatureParser("shot body part", [37, 38, 40, 70]),
+            "shot.outcome.id": CategoricalFeatureParser("shot body part", [96, 97, 98, 99, 100, 101, 115, 116]),
         },
         "special_parsers": {
             "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame", num_of_players_in_freeze_frame),
@@ -208,7 +208,7 @@ event_types_mapping = {
         "starting_index": 38,
         "feature_parsers": {
             "goalkeeper.type.id": CategoricalFeatureParser("goalkeeper type", [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 109, 110, 113, 114]),
-            "goalkeeper.outcome.id": CategoricalFeatureParser("goalkeeper outcome", [4, 13, 14, 16, 17, 47, 48, 49, 50, 51, 52, 53, 55, 56, 15, 58, 59, 117]),
+            "goalkeeper.outcome.id": CategoricalFeatureParser("goalkeeper outcome", [1, 4, 13, 14, 15, 16, 17, 47, 48, 49, 50, 51, 52, 53, 55, 56, 58, 59, 117]),
             "goalkeeper.position.id": CategoricalFeatureParser("goalkeeper position", [42, 43, 44]),
             "goalkeeper.technique.id": CategoricalFeatureParser("goalkeeper position", [45, 46]),
             "goalkeeper.body_part.id": CategoricalFeatureParser("goalkeeper body part", [i for i in range(35, 42)]),
@@ -221,7 +221,7 @@ event_types_mapping = {
         "ignore_event_type": False,
         "starting_index": 45,
         "feature_parsers": {
-            "bad_behavior.card.id": CategoricalFeatureParser("bad behavior card", [65, 66, 67]),
+            "bad_behavior.card.id": CategoricalFeatureParser("bad behavior card", [5, 6, 7]),
         }
     },
     # own goal for event
@@ -283,7 +283,7 @@ event_types_mapping = {
         "ignore_event_type": False,
         "starting_index": 65,
         "feature_parsers": {
-            "50_50.outcome.id": CategoricalFeatureParser("50/50 outcome", [108, 109, 147, 148])
+            "50_50.outcome.id": CategoricalFeatureParser("50/50 outcome", [1, 2, 3, 4])
         }
     },
     # half end event
