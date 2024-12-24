@@ -3,6 +3,10 @@ from parameterized import parameterized
 from tokenizer import vector_size, event_types_mapping, event_ids
 from tokenizer.feature_parsers import CategoricalFeatureParser
 from tokenizer.match_parser import MatchEventsParser
+from test_tokenizer.integration import (
+    shot_event_1, shot_event_2, shot_event_3, shot_event_4,
+    expected_shot_event_1, expected_shot_event_2, expected_shot_event_3, expected_shot_event_4
+)
 
 event_id_parser = CategoricalFeatureParser("event type", event_ids.values())
 parser = MatchEventsParser(vector_size)
@@ -250,6 +254,11 @@ class TestEventParsers(unittest.TestCase):
         }, [1 / 14, 1 / 18, 1 / 3, 1 / 2, 1 / 7, 0, 0]),  # Team 0, all attributes minimum values
 
 
+        # shot event
+        (0, "shot", shot_event_1, expected_shot_event_1),
+        (1, "shot", shot_event_2, expected_shot_event_2),
+        (0, "shot", shot_event_3, expected_shot_event_3),
+        (1, "shot", shot_event_4, expected_shot_event_4),
     ])
 
     def test_event_parser_features(self, set_index, event_name, event_specific_dict, expected):

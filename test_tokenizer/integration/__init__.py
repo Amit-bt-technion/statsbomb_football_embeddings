@@ -161,6 +161,8 @@ shot_event_1 = {
 }
 
 
+expected_shot_event_1 = []
+
 shot_event_2 = {
   "id" : "eb50d981-f261-4c2e-ba44-879ce1906209",
   "index" : 3329,
@@ -397,6 +399,10 @@ shot_event_2 = {
   }
 }
 
+
+expected_shot_event_2 = []
+
+
 shot_event_3 = {
   "id" : "9b2f6108-6b19-4756-92ff-3893306df5e4",
   "index" : 2244,
@@ -554,6 +560,10 @@ shot_event_3 = {
     } ]
   }
 }
+
+
+expected_shot_event_3 = []
+
 
 shot_event_4 = {
   "id" : "f96397fc-0e5d-4d04-884c-88074b4728a3",
@@ -801,3 +811,6 @@ shot_event_4 = {
     } ]
   }
 }
+
+
+expected_shot_event_4 = []
