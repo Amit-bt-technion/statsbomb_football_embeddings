@@ -1,6 +1,95 @@
 
 # shot events taken from https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/16120.json
 
+teams_and_players_1 = {
+  216: {
+    6722: 1/25,   # David Soria (GK - pos 1)
+    6627: 2/25,   # Damian Suarez (RB - pos 2)
+    6634: 3/25,   # Djene (RCB - pos 3)
+    6635: 5/25,   # Cabrera (LCB - pos 5)
+    6619: 6/25,   # Antunes (LB - pos 6)
+    6901: 9/25,   # Maksimovic (RDM - pos 9)
+    6863: 11/25,  # Arambarri (LDM - pos 11)
+    4546: 12/25,  # Foulquier (RM - pos 12)
+    6873: 16/25,  # Portillo (LM - pos 16)
+    6611: 22/25,  # Angel (RCF - pos 22)
+    11550: 24/25  # Mata (LCF - pos 24)
+  },
+  217: {
+    20055: 1/25,  # ter Stegen (GK - pos 1)
+    6379: 2/25,   # Sergi Roberto (RB - pos 2)
+    5213: 3/25,   # Pique (RCB - pos 3)
+    6826: 5/25,   # Lenglet (LCB - pos 5)
+    5211: 6/25,   # Alba (LB - pos 6)
+    5470: 10/25,  # Rakitic (CDM - pos 10)
+    8206: 13/25,  # Vidal (RCM - pos 13)
+    11392: 15/25, # Arthur (LCM - pos 15)
+    5503: 17/25,  # Messi (RW - pos 17)
+    5477: 21/25,  # Dembele (LW - pos 21)
+    5246: 23/25   # Suarez (CF - pos 23)
+  }
+}
+
+teams_and_players_4 = teams_and_players_1
+
+teams_and_players_3 = {
+  216: {
+    6722: 1 / 25,  # David Soria (GK - pos 1)
+    6627: 2 / 25,  # Damian Suarez (RB - pos 2)
+    6634: 3 / 25,  # Djene (RCB - pos 3)
+    6635: 5 / 25,  # Cabrera (LCB - pos 5)
+    6619: 6 / 25,  # Antunes (LB - pos 6)
+    6901: 9 / 25,  # Maksimovic (RDM - pos 9)
+    6863: 11 / 25,  # Arambarri (LDM - pos 11)
+    6873: 12 / 25,  # Portillo (RM - pos 12)
+    11550: 16 / 25,  # Mata (LM - pos 16)
+    6630: 22 / 25,  # Jorge Molina (RCF - pos 22)
+    6611: 24 / 25  # Angel (LCF - pos 24)
+  },
+  217: {
+    20055: 1/25,  # ter Stegen (GK - pos 1)
+    6379: 2/25,   # Sergi Roberto (RB - pos 2)
+    5213: 3/25,   # Pique (RCB - pos 3)
+    6826: 5/25,   # Lenglet (LCB - pos 5)
+    5211: 6/25,   # Alba (LB - pos 6)
+    5470: 10/25,  # Rakitic (CDM - pos 10)
+    8206: 13/25,  # Vidal (RCM - pos 13)
+    11392: 15/25, # Arthur (LCM - pos 15)
+    5503: 17/25,  # Messi (RW - pos 17)
+    5477: 21/25,  # Dembele (LW - pos 21)
+    5246: 23/25   # Suarez (CF - pos 23)
+  }
+}
+
+teams_and_players_2 = {
+  216: {
+    6722: 1 / 25,  # David Soria (GK - pos 1)
+    6627: 2 / 25,  # Damian Suarez (RB - pos 2)
+    6634: 3 / 25,  # Djene (RCB - pos 3)
+    6635: 5 / 25,  # Cabrera (LCB - pos 5)
+    6619: 6 / 25,  # Antunes (LB - pos 6)
+    6901: 9 / 25,  # Maksimovic (RDM - pos 9)
+    6863: 11 / 25,  # Arambarri (LDM - pos 11)
+    6873: 12 / 25,  # Portillo (RM - pos 12)
+    4712: 16 / 25,  # Saiz (LM - pos 16)
+    11550: 22 / 25,  # Mata (RCF - pos 22)
+    6630: 24 / 25  # Jorge Molina (LCF - pos 24)
+  },
+  217: {
+    20055: 1 / 25,  # ter Stegen (GK - pos 1)
+    6379: 2 / 25,  # Sergi Roberto (RB - pos 2)
+    5213: 3 / 25,  # Pique (RCB - pos 3)
+    6826: 5 / 25,  # Lenglet (LCB - pos 5)
+    5211: 6 / 25,  # Alba (LB - pos 6)
+    5203: 10 / 25,  # Busquets (CDM - pos 10)
+    5470: 13 / 25,  # Rakitic (RCM - pos 13)
+    11392: 15 / 25,  # Arthur (LCM - pos 15)
+    5503: 17 / 25,  # Messi (RW - pos 17)
+    5477: 21 / 25,  # Dembele (LW - pos 21)
+    5246: 23 / 25  # Suarez (CF - pos 23)
+  }
+}
+
 shot_event_1 = {
   "id" : "d3448b6e-b4eb-4d30-9e4e-ebbf95533d30",
   "index" : 314,
