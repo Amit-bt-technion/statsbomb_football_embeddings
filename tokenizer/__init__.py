@@ -146,7 +146,7 @@ event_types_mapping = {
             "shot.deflected": CategoricalFeatureParser("shot deflected", [0, 1]),
             "shot.technique.id": CategoricalFeatureParser("shot technique", [i for i in range(89, 96)]),
             "shot.body_part.id": CategoricalFeatureParser("shot body part", [37, 38, 40, 70]),
-            "shot.outcome.id": CategoricalFeatureParser("shot body part", [96, 97, 98, 99, 100, 101, 115, 116]),
+            "shot.outcome.id": CategoricalFeatureParser("shot outcome", [96, 97, 98, 99, 100, 101, 115, 116]),
         },
         "special_parsers": {
             "shot.freeze_frame": FreezeFrameFeaturesParser("freeze frame", num_of_players_in_freeze_frame),
