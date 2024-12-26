@@ -1,6 +1,6 @@
 from tokenizer.tokenizer import Tokenizer
 
-if __name__ == "__main__":
+if __name__ == "__main1__":
     matches = [
         "https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/15946.json",
         "https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/15956.json",
@@ -83,3 +83,16 @@ if __name__ == "__main__":
         tokenizer.get_tokenized_match_events()
         # tokenizer.export_to_csv("matches/")
 
+if __name__ == "__main__":
+    from test_tokenizer.integration import shot_event_1, shot_event_4, shot_event_2, shot_event_3, teams_and_players_1, teams_and_players_2, teams_and_players_3, teams_and_players_4
+    from tokenizer.tokenizer import MatchEventsParser
+    parser = MatchEventsParser(128)
+    parser.teams_and_players = teams_and_players_1
+    vec_1 = parser.parse_event(shot_event_1)
+    parser.teams_and_players = teams_and_players_2
+    vec_2 = parser.parse_event(shot_event_2)
+    parser.teams_and_players = teams_and_players_3
+    vec_3 = parser.parse_event(shot_event_3)
+    parser.teams_and_players = teams_and_players_4
+    vec_4 = parser.parse_event(shot_event_4)
+    vec = []
