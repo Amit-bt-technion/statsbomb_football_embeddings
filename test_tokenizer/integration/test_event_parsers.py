@@ -676,5 +676,5 @@ class TestEventParsers(unittest.TestCase):
                 event[key] = val
 
         parser.parse_event(event)
-        self.assertEquals(expected_lineup, parser.teams_and_players)
+        self.assertEqual(expected_lineup, parser.teams_and_players)
 
