@@ -136,3 +136,11 @@ class FreezeFrameFeaturesParser(FeatureParser):
             features[features_index_start: features_index_start + 2] = [x_loc, y_loc]
 
         return features
+
+
+class DoNothingParser(FeatureParser):
+    def __init__(self, name: str):
+        super().__init__(name)
+
+    def get_normalized(self, val):
+        return val

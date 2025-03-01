@@ -6,7 +6,8 @@ from tokenizer.feature_parsers import (
     TeamIdParser,
     MinuteFeatureParser,
     PlayerPositionFeatureParser,
-    FreezeFrameFeaturesParser
+    FreezeFrameFeaturesParser,
+    DoNothingParser
 )
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ event_types_mapping = {
         "ignore_event_type": False,
         "starting_index": 0,
         "feature_parsers": {
-            "type.id": CategoricalFeatureParser("type", list(event_ids.values())),
+            "type.id":  DoNothingParser("type"), #CategoricalFeatureParser("type", list(event_ids.values())),
             "play_pattern.id": CategoricalFeatureParser("play_pattern", [i for i in range(1, 10)]),
             "location[0]": RangeFeatureParser("x_location", min_value=0, max_value=120),
             "location[1]": RangeFeatureParser("y_location", min_value=0, max_value=80),
