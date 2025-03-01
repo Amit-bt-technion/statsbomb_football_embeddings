@@ -1,3 +1,4 @@
+import os
 import json
 import pandas as pd
 from urllib.request import urlopen
@@ -38,9 +39,9 @@ class Tokenizer:
         return self.tokenized_events_dataframe
 
     def export_to_csv(self, path='./'):
-        if path[-1] != '/':
-            path = f"{path}/"
-        self.tokenized_events_dataframe.to_csv(f"{path}{self._get_match_file_name()}.csv")
+        os.makedirs(path, exist_ok=True)
+        file_path = os.path.join(path, f"{self._get_match_file_name()}.csv")
+        self.tokenized_events_dataframe.to_csv(file_path)
 
     def _get_match_file_name(self):
-        return self.path.split('/')[-1].split('.')[0]
+        return os.path.splitext(os.path.basename(self.path))[0]
