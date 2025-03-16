@@ -1,9 +1,8 @@
-import pandas as pd
-from typing import List, Self, Union
-
+from typing import List, Union
 from tokenizer import event_types_mapping
 from tokenizer.utils.helper_functions import get_value_of_nested_key
 from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
+from tokenizer import event_ids
 
 player_position_parser = CategoricalFeatureParser("player position id", [i for i in range(1, 26)])
 
@@ -27,11 +26,11 @@ class MatchEventsParser:
         self.tokenized_event = None
         self.teams_and_players: dict[int, dict] = {}
         self.change_teams_and_players = {
-            19: self.substitution_event_handler,
+            event_ids['substitution']: self.substitution_event_handler,
             # starting_xi event type
-            35: self.lineup_handler,
+            event_ids['starting_xi']: self.lineup_handler,
             # tactical_shift event type
-            36: self.lineup_handler,
+            event_ids['tactical_shift']: self.lineup_handler,
         }
         self.cleanup_teams_and_players = {
             19: self.substitution_event_cleaner
