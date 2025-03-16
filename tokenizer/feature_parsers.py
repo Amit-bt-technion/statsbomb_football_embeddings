@@ -11,7 +11,7 @@ class FeatureParser(ABC):
 
     # TODO: implement and override as necessary
     @abstractmethod
-    def get_normalized(self, val: float) -> Union[float, List[float]]:
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         pass
 
     def __repr__(self):
@@ -24,7 +24,7 @@ class RangeFeatureParser(FeatureParser):
         self.min_value = min_value
         self.max_value = max_value
 
-    def get_normalized(self, val):
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         Calculates a normalized value of the parameter using continuous min-max scaling in range [0,1].
         :param val: The value to be normalized.
@@ -41,7 +41,7 @@ class CategoricalFeatureParser(FeatureParser):
         self.categories = {value: index + 1 for index, value in enumerate(sorted(categories))}
         self.num_categories = len(categories)
 
-    def get_normalized(self, val, **kwargs):
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         Calculates a normalized value of the parameter using discrete segmentation of range (0, 1].
         :param val: The value to be normalized.
@@ -54,7 +54,7 @@ class TeamIdParser(CategoricalFeatureParser):
     def __init__(self, name: str) -> None:
         super().__init__(name, [])
 
-    def get_normalized(self, val: float, **kwargs) -> List[float]:
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         provides binary classification for team ids, that remains constant throughout the match
         :param val: a value representing the id of the team.
@@ -70,7 +70,7 @@ class MinuteFeatureParser(RangeFeatureParser):
     def __init__(self, name: str, min_value: float, max_value: float) -> None:
         super().__init__(name, min_value, max_value)
 
-    def get_normalized(self, val: float, **kwargs) -> Union[float, List[float]]:
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         calculates a normalized value of the minute of the event as an offset from period start.
         :param val: a value representing the minute of the event.
@@ -91,7 +91,7 @@ class PlayerPositionFeatureParser(FeatureParser):
     def __init__(self, name: str):
         super().__init__(name)
 
-    def get_normalized(self, val, **kwargs) -> List[float]:
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         calculates a normalized value of the position of the player, identified by the id
         :param val: a value representing the player id in the json file
@@ -116,7 +116,7 @@ class FreezeFrameFeaturesParser(FeatureParser):
         self.y_loc_parser = RangeFeatureParser("Y location parser", 0, 80)
         self.is_teammate_parser = CategoricalFeatureParser("is_teammate", [0, 1])
 
-    def get_normalized(self, val: List[dict], **kwargs) -> List[float]:
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         returns a list of length 4 * num_of_players, containing the normalized values for player position, x location,
         y location, and is teammate for every player in the top num_of_players
@@ -155,7 +155,7 @@ class DoNothingParser(FeatureParser):
     def __init__(self, name: str):
         super().__init__(name)
 
-    def get_normalized(self, val):
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
         Returns the value as-is.
         :param val: The value to be returned.
