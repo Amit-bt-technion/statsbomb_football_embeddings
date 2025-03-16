@@ -9,6 +9,16 @@ player_position_parser = CategoricalFeatureParser("player position id", [i for i
 
 
 class MatchEventsParser:
+    """
+    This class handles tokenizing single events.
+
+    Attributes:
+        vector_size: the number of features in the output vector.
+        tokenized_event: the tokenized vector representation of an event.
+        teams_and_players: a dictionary 2 keys for teams, each mapping to a dictionary of player-id to player-position mapping.
+        change_teams_and_players: a dictionary of event types that update teams_and_players, and their corresponding handlers.
+        cleanup_teams_and_players: a dictionary of event types that should update teams_and_players after parsing the event.
+    """
     def __init__(
         self,
         vector_size: int,
@@ -28,6 +38,12 @@ class MatchEventsParser:
         }
 
     def parse_event(self, event: dict) -> Union[List, None]:
+        """
+        Manages the entire flow of event parsing by initializing the vector, extracting the event id, updating the
+        teams_and_players attribute and ignoring the event if necessary.
+        :param event: the event dictionary as loaded from the json file.
+        :return: vector representation of the event.
+        """
         self.tokenized_event = [0 for _ in range(self.vector_size)]
         event_id = event["type"]["id"]
         if event_id in self.change_teams_and_players:
@@ -40,6 +56,15 @@ class MatchEventsParser:
         return self.tokenized_event
 
     def tokenize_event(self, event: dict, event_id: int, parse_common:bool = True):
+        """
+        Parses an entire event and returns a vector representation of the event.
+        The method is called by parse_event and parsers the common features of the event, and then recurses to parse
+        the event-specific events by altering the boolean flag.
+        :param event: the event dictionary as loaded from the json file.
+        :param event_id: the number representing the type of event.
+        :param parse_common: a boolean flag stating whether the method should handle parsing the common or specific features.
+        :return: vector representation of the event.
+        """
         if parse_common:
             event_mapping = event_types_mapping["common"]
         else:
@@ -72,6 +97,10 @@ class MatchEventsParser:
     # **************************************    Special event_handlers     ******************************************
 
     def lineup_handler(self, event: dict):
+        """
+        Updates the teams_and_players attribute based on starting_xi events.
+        :param event: a starting_xi event dictionary as loaded from the json file.
+        """
         team_id = event["team"]["id"]
         self.teams_and_players[team_id] = {}
         lineup = event["tactics"]["lineup"]
