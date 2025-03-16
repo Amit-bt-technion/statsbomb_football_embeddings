@@ -3,6 +3,9 @@ from typing import List, Any, Union
 
 
 class FeatureParser(ABC):
+    """
+    This base class defines the interface with which parsers of features from the json files are used.
+    """
     def __init__(self, name: str):
         self.feature_name = name
 
@@ -22,6 +25,11 @@ class RangeFeatureParser(FeatureParser):
         self.max_value = max_value
 
     def get_normalized(self, val):
+        """
+        Calculates a normalized value of the parameter using continuous min-max scaling in range [0,1].
+        :param val: The value to be normalized.
+        :return: The normalized value in range [0,1].
+        """
         val = min(val, self.max_value)
         val = max(val, self.min_value)
         return (val - self.min_value) / (self.max_value - self.min_value)
@@ -34,6 +42,11 @@ class CategoricalFeatureParser(FeatureParser):
         self.num_categories = len(categories)
 
     def get_normalized(self, val, **kwargs):
+        """
+        Calculates a normalized value of the parameter using discrete segmentation of range (0, 1].
+        :param val: The value to be normalized.
+        :return: The value in range (0, 1] that represents the category of the parameter.
+        """
         return self.categories.get(val, 0) / self.num_categories
 
 
@@ -143,4 +156,9 @@ class DoNothingParser(FeatureParser):
         super().__init__(name)
 
     def get_normalized(self, val):
+        """
+        Returns the value as-is.
+        :param val: The value to be returned.
+        :return: The original value.
+        """
         return val
