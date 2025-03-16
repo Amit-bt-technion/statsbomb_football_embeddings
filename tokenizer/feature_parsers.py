@@ -118,7 +118,7 @@ class FreezeFrameFeaturesParser(FeatureParser):
 
     def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
         """
-        returns a list of length 4 * num_of_players, containing the normalized values for player position, x location,
+        returns a list of length 2 * num_of_players, containing the normalized values for player position, x location,
         y location, and is teammate for every player in the top num_of_players
         :param val: the freeze_frame object from the shot event
         :param kwargs['match_parser']: a MatchEventParser instance of the current match
