@@ -2,10 +2,10 @@ import unittest
 from parameterized import parameterized
 from tokenizer import vector_size, event_types_mapping, event_ids
 from tokenizer.feature_parsers import CategoricalFeatureParser
-from tokenizer.match_parser import MatchEventsParser
+from tokenizer.event_parser import EventParser
 
 event_id_parser = CategoricalFeatureParser("event type", event_ids.values())
-parser = MatchEventsParser(vector_size)
+parser = EventParser(vector_size)
 
 
 class TestEventParsers(unittest.TestCase):

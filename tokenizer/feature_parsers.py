@@ -58,11 +58,11 @@ class TeamIdParser(CategoricalFeatureParser):
         """
         provides binary classification for team ids, that remains constant throughout the match
         :param val: a value representing the id of the team.
-        :param kwargs['match_parser']: a MatchEventParser instance of the current match with an initialized
+        :param kwargs['event_parser']: a MatchEventParser instance of the current match with an initialized
         teams_and_players property
         :return: a category for the team id.
         """
-        super().__init__(self.feature_name, kwargs["match_parser"].teams_and_players.keys())
+        super().__init__(self.feature_name, kwargs["event_parser"].teams_and_players.keys())
         return [super().get_normalized(val)]
 
 
@@ -95,17 +95,17 @@ class PlayerPositionFeatureParser(FeatureParser):
         """
         calculates a normalized value of the position of the player, identified by the id
         :param val: a value representing the player id in the json file
-        :param kwargs['match_parser']: a MatchEventParser instance of the current match
+        :param kwargs['event_parser']: a MatchEventParser instance of the current match
         :param kwargs['event']: the pass event from which the recipient is parsed
         :return: the normalized value of the position of the player
         """
         # if val is 0, 'recipient' doesn't exist on 'pass' dict, pass is incomplete
         if val == 0:
             return [0]
-        match_parser = kwargs["match_parser"]
+        event_parser = kwargs["event_parser"]
         team_id = kwargs["event"]["team"]["id"]
         # positions in the teams_and_players mapping are normalized
-        return [match_parser.teams_and_players[team_id][val]]
+        return [event_parser.teams_and_players[team_id][val]]
 
 
 class FreezeFrameFeaturesParser(FeatureParser):
@@ -121,7 +121,7 @@ class FreezeFrameFeaturesParser(FeatureParser):
         returns a list of length 2 * num_of_players, containing the normalized values for player position, x location,
         y location, and is teammate for every player in the top num_of_players
         :param val: the freeze_frame object from the shot event
-        :param kwargs['match_parser']: a MatchEventParser instance of the current match
+        :param kwargs['event_parser']: a MatchEventParser instance of the current match
         :param kwargs['event']: the event from which the freeze_frame on the shot event is parsed
         :return:
         """
@@ -129,10 +129,10 @@ class FreezeFrameFeaturesParser(FeatureParser):
         if type(val) is not list or len(val) == 0:
             return features
 
-        match_parser = kwargs["match_parser"]
+        event_parser = kwargs["event_parser"]
         event = kwargs["event"]
         team_id = event["team"]["id"]
-        teams_and_players = match_parser.teams_and_players
+        teams_and_players = event_parser.teams_and_players
         opponent_team_id = next(num for num in teams_and_players.keys() if num != team_id)
 
         num_of_players = min(self.num_of_players, len(val))

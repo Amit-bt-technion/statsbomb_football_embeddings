@@ -7,7 +7,7 @@ from tokenizer import event_ids
 player_position_parser = CategoricalFeatureParser("player position id", [i for i in range(1, 26)])
 
 
-class MatchEventsParser:
+class EventParser:
     """
     This class handles tokenizing single events.
 
@@ -84,7 +84,7 @@ class MatchEventsParser:
         for dict_path, special_parser in special_parsers.items():
             vals = special_parser.get_normalized(
                 get_value_of_nested_key(event, dict_path),
-                match_parser=self,
+                event_parser=self,
                 event=event
             )
             features.extend(vals)

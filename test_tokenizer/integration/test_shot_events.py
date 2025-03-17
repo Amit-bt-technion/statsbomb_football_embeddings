@@ -1,6 +1,6 @@
 import unittest
 from parameterized import parameterized
-from tokenizer.match_parser import MatchEventsParser
+from tokenizer.event_parser import EventParser
 from tokenizer import vector_size
 from test_tokenizer.integration import (
     shot_event_1, shot_event_2, shot_event_3, shot_event_4,
@@ -8,7 +8,7 @@ from test_tokenizer.integration import (
     expected_shot_event_1, expected_shot_event_2, expected_shot_event_3, expected_shot_event_4
 )
 
-parser = MatchEventsParser(vector_size)
+parser = EventParser(vector_size)
 
 
 class TestShotEvents(unittest.TestCase):

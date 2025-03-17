@@ -1,6 +1,9 @@
 import unittest
 from parameterized import parameterized
-from tokenizer.match_parser import MatchEventsParser
+
+from main import events_dir
+from tokenizer import event_ids
+from tokenizer.event_parser import EventParser
 from tokenizer.feature_parsers import (
     CategoricalFeatureParser,
     RangeFeatureParser,
@@ -75,13 +78,13 @@ class TestTokenizer(unittest.TestCase):
     ])
     def test_pass_recipient_feature_parser(self, player_id, teams_and_players, event, expected):
         parser = PlayerPositionFeatureParser("test parser")
-        match_parser = MatchEventsParser(1)
-        match_parser.teams_and_players = teams_and_players
+        event_parser = EventParser(1)
+        event_parser.teams_and_players = teams_and_players
         if expected is None:
             with self.assertRaises(KeyError):
-                parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected]
+                parser.get_normalized(player_id, event_parser=event_parser, event=event), [expected]
         else:
-            self.assertEqual(parser.get_normalized(player_id, match_parser=match_parser, event=event), [expected])
+            self.assertEqual(parser.get_normalized(player_id, event_parser=event_parser, event=event), [expected])
 
     @parameterized.expand([
         ([{"player": {"id": 3}, "teammate": False, "location": [30, 60]}],
@@ -107,11 +110,11 @@ class TestTokenizer(unittest.TestCase):
     ])
     def test_freeze_frame_features_parser(self, freeze_frame, teams_and_players, event, expected):
         parser = FreezeFrameFeaturesParser("test parser", 22)
-        match_parser = MatchEventsParser(1)
-        match_parser.teams_and_players = teams_and_players
+        events_parser = EventParser(1)
+        events_parser.teams_and_players = teams_and_players
         if expected is None:
             with self.assertRaises(ValueError):
-                parser.get_normalized(freeze_frame, match_parser=match_parser, event=event)
+                parser.get_normalized(freeze_frame, event_parser=events_parser, event=event)
         else:
-            self.assertEqual(parser.get_normalized(freeze_frame, match_parser=match_parser, event=event), expected)
+            self.assertEqual(parser.get_normalized(freeze_frame, event_parser=events_parser, event=event), expected)
         
