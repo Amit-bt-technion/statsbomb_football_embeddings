@@ -68,7 +68,7 @@ class Tokenizer:
         :param path: a local file=system path of the directory in which the csv file should be saved.
         """
         os.makedirs(path, exist_ok=True)
-        file_path = os.path.join(path, f"{self._get_match_file_name()}.csv")
+        file_path = os.path.normpath(os.path.join(path, f"{self._get_match_file_name()}.csv"))
         self.tokenized_events_dataframe.to_csv(file_path)
 
     def _get_match_file_name(self):
