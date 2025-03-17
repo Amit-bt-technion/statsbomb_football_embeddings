@@ -48,6 +48,7 @@ class Tokenizer:
         self.tokenized_events_matrix = []
         self.tokenized_events_dataframe = None
         self.event_parser = EventParser(vector_size)
+        logger.info(f"Tokenizer initialized for match: {self.path}")
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
         """
@@ -55,9 +56,13 @@ class Tokenizer:
         :return: a pandas dataframe that contains the tokenized events of the entire match.
         """
         for event in self.data:
-            tokenized_event = self.event_parser.parse_event(event)
-            if tokenized_event is not None:
-                self.tokenized_events_matrix.append(tokenized_event)
+            try:
+                tokenized_event = self.event_parser.parse_event(event)
+                if tokenized_event is not None:
+                    self.tokenized_events_matrix.append(tokenized_event)
+            except Exception as e:
+                logger.error("Event tokenization failed!")
+                logger.error(e)
 
         self.tokenized_events_dataframe = pd.DataFrame(self.tokenized_events_matrix)
         return self.tokenized_events_dataframe
