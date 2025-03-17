@@ -9,6 +9,7 @@ from tokenizer.feature_parsers import (
     FreezeFrameFeaturesParser
 )
 
+logging.basicConfig(encoding='utf-8', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ************************************************************************************************************
