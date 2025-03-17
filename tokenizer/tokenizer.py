@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from urllib.request import urlopen
 from typing import List
-from tokenizer.match_parser import MatchEventsParser
+from tokenizer.event_parser import EventParser
 from tokenizer import logger, vector_size
 
 # ************************************************************************************************************
@@ -12,6 +12,16 @@ from tokenizer import logger, vector_size
 
 
 class Tokenizer:
+    """
+    This class handles tokenizing of entire matches into dataframes, where each row corresponds to an event by order.
+
+    Attributes:
+        path: a relative / absolute file-system path or a url of the match json file.
+        data: a list of dictionaries loaded from the json file, where each dictionary corresponds to an event.
+        tokenized_events_matrix: a list of lists that contains the tokenized events, each list is an event representation.
+        tokenized_events_dataframe: a pandas dataframe that contains the tokenized events of the entire match.
+        event_parser: an instance of EventParser used to process each event.
+    """
     def __init__(self, path: str, is_online_resource: bool = False):
         # load the json list of dicts
         try:
@@ -27,11 +37,15 @@ class Tokenizer:
         self.path = path
         self.tokenized_events_matrix = []
         self.tokenized_events_dataframe = None
-        self.match_parser = MatchEventsParser(vector_size)
+        self.event_parser = EventParser(vector_size)
 
     def get_tokenized_match_events(self) -> pd.DataFrame:
+        """
+        Returns a tokenized match events dataframe.
+        :return: a pandas dataframe that contains the tokenized events of the entire match.
+        """
         for event in self.data:
-            tokenized_event = self.match_parser.parse_event(event)
+            tokenized_event = self.event_parser.parse_event(event)
             if tokenized_event is not None:
                 self.tokenized_events_matrix.append(tokenized_event)
 
@@ -39,9 +53,17 @@ class Tokenizer:
         return self.tokenized_events_dataframe
 
     def export_to_csv(self, path='./'):
+        """
+        Exports the tokenized match events dataframe to a csv file placed in the given path.
+        :param path: a local file=system path of the directory in which the csv file should be saved.
+        """
         os.makedirs(path, exist_ok=True)
         file_path = os.path.join(path, f"{self._get_match_file_name()}.csv")
         self.tokenized_events_dataframe.to_csv(file_path)
 
     def _get_match_file_name(self):
+        """
+        Extracts the file name without the file extension.
+        :return: a string with the file name without the file extension.
+        """
         return os.path.splitext(os.path.basename(self.path))[0]
