@@ -23,6 +23,16 @@ class Tokenizer:
         event_parser: an instance of EventParser used to process each event.
     """
     def __init__(self, path: str, is_online_resource: bool = False):
+        """
+       Initialize a tokenizer for match event data.
+
+       :param path: Path to the JSON file containing match events or URL for remote resources.
+       :param is_online_resource: Whether the path is a URL (True) or local file path (False).
+
+       Raises:
+           FileNotFoundError: If the local file cannot be found.
+           HTTPError: If the URL cannot be accessed (for online resources).
+       """
         # load the json list of dicts
         try:
             if not is_online_resource:
