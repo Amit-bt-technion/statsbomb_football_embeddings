@@ -18,7 +18,7 @@ The tokenizer processes event data from football matches and generates a consist
 3. **Continuous features**: Represented as continuous values in range [0, 1] (zero-inclusive), where values exceeding the allowed range from Statsbomb Doc are approximated to the closest end of the range.
 
 ## Visual Representation of the Output Vectors
-Each event is represented by a 128-dimensional vector. Below is a comprehensive breakdown of all 128 indices, their data types, and the potential value ranges:
+Each event is represented by a 128-dimensional vector. Below is a comprehensive breakdown of all 128 indices and their data types:
 
 | Index | Name                               | Type         | Details    |
 |-------|------------------------------------|--------------|------------|
@@ -167,9 +167,26 @@ if __name__ == "__main__":
         try:
             tokenizer = Tokenizer(os.path.join(events_dir, match))
             df = tokenizer.get_tokenized_match_events()
-            df.to_csv(os.path.join(base_dir, "../csv", match + ".csv"))
+            tokenizer.export_to_csv("csv/")
         except Exception as e:
             print(f"{match} failed with error: {e}")
+```
+
+The following code snippet demonstrates how to use the `Tokenizer` class to process football match event data without cloning the open-data repo:
+
+```python
+from tokenizer.tokenizer import Tokenizer
+
+if __name__ == "__main__":
+    matches = [
+        "https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/15946.json",
+        "https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/15956.json",
+        "https://raw.githubusercontent.com/statsbomb/open-data/refs/heads/master/data/events/15973.json",
+    ]   
+    for match in matches:
+        tokenizer = Tokenizer(match, True)
+        tokenizer.get_tokenized_match_events()
+        # tokenizer.export_to_csv("csv/")
 ```
 
 ## Installation
@@ -177,6 +194,9 @@ To install the necessary dependencies, run:
 ```bash
 pip install -r requirements.txt
 ```
+
+## Repository Authors
+Amit Ben-Tzvi & Ilan Zendel.
 
 ## Contributing
 We welcome contributions to improve this project. Please submit issues or pull requests on the project's GitHub repository.
