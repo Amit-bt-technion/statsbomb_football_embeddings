@@ -2,7 +2,7 @@ from typing import List, Union
 from tokenizer import event_types_mapping
 from tokenizer.utils.helper_functions import get_value_of_nested_key
 from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
-from tokenizer import event_ids
+from tokenizer import event_ids, logger
 
 player_position_parser = CategoricalFeatureParser("player position id", [i for i in range(1, 26)])
 
@@ -38,16 +38,18 @@ class EventParser:
 
     def parse_event(self, event: dict) -> Union[List, None]:
         """
-        Manages the entire flow of event parsing by initializing the vector, extracting the event id, updating the
+        Manages the entire flow of event parsing by initializing the vector, extracting the event type, updating the
         teams_and_players attribute and ignoring the event if necessary.
         :param event: the event dictionary as loaded from the json file.
         :return: vector representation of the event.
         """
         self.tokenized_event = [0 for _ in range(self.vector_size)]
         event_id = event["type"]["id"]
+        logger.info(f"Parsing event {event['id']} of type {event_id}")
         if event_id in self.change_teams_and_players:
             self.change_teams_and_players[event_id](event)
         if event_types_mapping[event_id]["ignore_event_type"]:
+            logger.info(f"Skipping event {event_id} as event type is ignored")
             return None
         self.tokenize_event(event, event_id)
         if event_id in self.cleanup_teams_and_players:
@@ -117,7 +119,8 @@ class EventParser:
         team_id = event["team"]["id"]
         out_player_id = event["player"]["id"]
         in_player_id = event["substitution"]["replacement"]["id"]
-        # retaining the previous players' position as there is no attribute in the event that indicates a change
+        logger.info(f"substitution for team {team_id}: {out_player_id} is replaced with {in_player_id}")
+        # retaining the previous players' position as there is no attribute in the event-data that indicates an updated position of the incoming player
         prev_position = self.teams_and_players[team_id][out_player_id]
         self.teams_and_players[team_id][in_player_id] = prev_position
 
