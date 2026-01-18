@@ -82,3 +82,8 @@ if __name__ == "__main__":
         tokenizer = Tokenizer(match, True)
         tokenizer.get_tokenized_match_events()
         # tokenizer.export_to_csv("matches/")
+
+
+if __name__ == "__main__":
+    main()
+

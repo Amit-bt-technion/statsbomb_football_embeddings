@@ -4,7 +4,7 @@ import pandas as pd
 from urllib.request import urlopen
 from typing import List
 from tokenizer.event_parser import EventParser
-from tokenizer import logger, vector_size
+from tokenizer.config import logger, vector_size
 
 # ************************************************************************************************************
 #                                           Tokenizer Class

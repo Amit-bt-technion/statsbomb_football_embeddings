@@ -1,8 +1,7 @@
 from typing import List, Union
-from tokenizer import event_types_mapping
+from tokenizer.config import event_types_mapping, event_ids, logger
 from tokenizer.utils.helper_functions import get_value_of_nested_key
 from tokenizer.feature_parsers import FeatureParser, CategoricalFeatureParser, RangeFeatureParser
-from tokenizer import event_ids, logger
 
 player_position_parser = CategoricalFeatureParser("player position id", [i for i in range(1, 26)])
 

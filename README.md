@@ -189,10 +189,84 @@ if __name__ == "__main__":
         # tokenizer.export_to_csv("csv/")
 ```
 
+## Event Validation
+
+The package includes a comprehensive validation system for tokenized events. This is particularly useful for:
+- Validating generated events from machine learning models
+- Quality assurance of tokenization
+- Filtering invalid events from datasets
+
+### Quick Start
+
+```python
+from tokenizer import EventValidator, StrictnessLevel
+import numpy as np
+
+# Create a validator
+validator = EventValidator(
+    strictness=StrictnessLevel.MODERATE,
+    max_time_gap=30.0,
+    logging_level=logging.INFO
+)
+
+# Validate a single event (128-dimensional vector)
+event_vector = np.random.rand(128)
+report = validator.validate_event(event_vector)
+
+if report.valid:
+    print(f"✓ Event is valid! Score: {report.validity_score:.2%}")
+else:
+    print(f"✗ Event has {report.error_count} errors")
+    for issue in report.issues:
+        print(f"  - {issue.message}")
+
+# Validate a sequence of events
+events = np.random.rand(10, 128)
+seq_report = validator.validate_sequence(events)
+print(f"Valid events: {seq_report.valid_events}/{seq_report.total_events}")
+```
+
+### Validation Features
+
+**Single Event Validation:**
+- Vector structure (128 dimensions, no NaN/inf)
+- Event type identification
+- Common features (time, location, team, possession)
+- Event-specific features (shot xG, pass distance, etc.)
+- Football domain constraints
+
+**Sequence Validation:**
+- Chronological ordering of timestamps
+- Possession continuity and valid transitions
+- Location plausibility between consecutive events
+- Time gap constraints
+
+**Configurable Strictness Levels:**
+- `STRICT`: All features must be in valid ranges
+- `MODERATE`: Small deviations allowed (default)
+- `LENIENT`: Only major violations flagged
+
+**Detailed Reporting:**
+- Per-issue explanations in plain English
+- Validity scores (0.0 to 1.0)
+- JSON export for integration with other tools
+
+For detailed documentation, see [VALIDATION_QUICKSTART.md](VALIDATION_QUICKSTART.md).
+
+For examples, run:
+```bash
+python examples/validation_demo.py
+```
+
 ## Installation
 To install the necessary dependencies, run:
 ```bash
 pip install -r requirements.txt
+```
+
+Or using `uv`:
+```bash
+uv pip install -e .
 ```
 
 ## Repository Authors
