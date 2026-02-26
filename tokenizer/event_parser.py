@@ -77,7 +77,11 @@ class EventParser:
 
         # interating through regular feature parsers
         for dict_path, feature_parser in parsers.items():
-            val = feature_parser.get_normalized(get_value_of_nested_key(event, dict_path))
+            val = feature_parser.get_normalized(
+                get_value_of_nested_key(event, dict_path),
+                event_parser=self,
+                event=event
+            )
             features.append(val)
 
         # calling special feature parsing functions that utilize the bottom part of index range in vector

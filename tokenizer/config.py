@@ -13,7 +13,9 @@ from tokenizer.feature_parsers import (
     TeamIdParser,
     MinuteFeatureParser,
     PlayerPositionFeatureParser,
-    FreezeFrameFeaturesParser
+    FreezeFrameFeaturesParser,
+    UnifiedTimeParser,
+    ZeroFeatureParser,
 )
 
 logging.basicConfig(encoding='utf-8', level=logging.INFO)
@@ -49,12 +51,12 @@ event_types_mapping = {
             "under_pressure": CategoricalFeatureParser("under_pressure", [0, 1]),
             "out": CategoricalFeatureParser("out", [0, 1]),
             "counterpress": CategoricalFeatureParser("counterpress", [0, 1]),
-            "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
-            "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
+            "period": UnifiedTimeParser("unified_time"),
+            "second": ZeroFeatureParser("second_zeroed"),
             "position.id": CategoricalFeatureParser("position", [i for i in range(1,26)])
         },
         "special_parsers": {
-            "minute": MinuteFeatureParser("minute", 0, 60),
+            "minute": ZeroFeatureParser("minute_zeroed", as_list=True),
             "team.id": TeamIdParser("team"),
             "possession_team.id": TeamIdParser("possession_team"),
             "player.id": PlayerPositionFeatureParser("player_designated_position"),
