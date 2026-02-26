@@ -1,7 +1,6 @@
 import unittest
 from parameterized import parameterized
 
-from main import events_dir
 from tokenizer import event_ids
 from tokenizer.event_parser import EventParser
 from tokenizer.feature_parsers import (
@@ -9,7 +8,9 @@ from tokenizer.feature_parsers import (
     RangeFeatureParser,
     MinuteFeatureParser,
     PlayerPositionFeatureParser,
-    FreezeFrameFeaturesParser
+    FreezeFrameFeaturesParser,
+    UnifiedTimeParser,
+    ZeroFeatureParser,
 )
 
 
@@ -66,6 +67,57 @@ class TestTokenizer(unittest.TestCase):
         # on the actual parser the top of the range is 60 inclusive, simplified here for easy calculations
         parser = MinuteFeatureParser("test parser", 0, 60)
         self.assertEqual(parser.get_normalized(val, event=event), [expected])
+
+    # ---- UnifiedTimeParser tests ----
+
+    @parameterized.expand([
+        # (period, minute, second, expected_normalised)
+        # Formula: total_seconds = minute * 60 + second; norm = total / 9059
+        # Period is passed as `val` but ignored by the parser.
+        #
+        # Period 1: total = 15*60+30 = 930, norm = 930/9059
+        (1, 15, 30, 930 / 9059),
+        # Period 1: total = 0
+        (1, 0, 0, 0.0),
+        # Period 1 stoppage: total = 47*60+59 = 2879
+        (1, 47, 59, 2879 / 9059),
+        # Period 2: total = 60*60+0 = 3600
+        (2, 60, 0, 3600 / 9059),
+        # Period 2: total = 75*60+30 = 4530
+        (2, 75, 30, 4530 / 9059),
+        # Period 3 (extra time): total = 100*60+0 = 6000
+        (3, 100, 0, 6000 / 9059),
+        # Period 4 (extra time 2): total = 115*60+30 = 6930
+        (4, 115, 30, 6930 / 9059),
+        # Period 5 (penalties): total = 120*60+0 = 7200
+        (5, 120, 0, 7200 / 9059),
+    ])
+    def test_unified_time_parser(self, period, minute, second, expected):
+        parser = UnifiedTimeParser("test unified time")
+        event = {"period": period, "minute": minute, "second": second}
+        result = parser.get_normalized(period, event=event)
+        self.assertAlmostEqual(result, expected, places=6)
+
+    def test_unified_time_parser_clamps_to_max(self):
+        """Values beyond MAX_MATCH_SECONDS should be clamped to 1.0."""
+        parser = UnifiedTimeParser("test unified time")
+        # Extreme values that would exceed the max
+        event = {"period": 5, "minute": 200, "second": 59}
+        result = parser.get_normalized(5, event=event)
+        self.assertLessEqual(result, 1.0)
+
+    # ---- ZeroFeatureParser tests ----
+
+    def test_zero_feature_parser_returns_zero(self):
+        parser = ZeroFeatureParser("test zeroed")
+        self.assertEqual(parser.get_normalized(42), 0)
+        self.assertEqual(parser.get_normalized(0), 0)
+        self.assertEqual(parser.get_normalized(999), 0)
+
+    def test_zero_feature_parser_as_list(self):
+        parser = ZeroFeatureParser("test zeroed list", as_list=True)
+        self.assertEqual(parser.get_normalized(42), [0])
+        self.assertEqual(parser.get_normalized(0), [0])
 
     @parameterized.expand([
         (903, {1827: {905: 0.833, 902: 1, 903: 0.2, 901: 0.15}},    {"team": {"id": 1827}}, 0.2),

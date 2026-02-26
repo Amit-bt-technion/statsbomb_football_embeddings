@@ -83,11 +83,11 @@ class EventValidator:
     UNDER_PRESSURE_IDX = 5  # under_pressure
     OUT_IDX = 6  # out
     COUNTERPRESS_IDX = 7  # counterpress
-    PERIOD_IDX = 8  # period
-    SECOND_IDX = 9  # second
+    PERIOD_IDX = 8  # unified_time (normalized total match seconds)
+    SECOND_IDX = 9  # zeroed (deprecated)
     POSITION_IDX = 10  # position.id
     # Special parsers occupy indices 11-14
-    MINUTE_IDX = 11  # minute (special parser)
+    MINUTE_IDX = 11  # zeroed (deprecated)
     TEAM_IDX = 12  # team.id (special parser)
     POSSESSION_TEAM_IDX = 13  # possession_team.id (special parser)
     PLAYER_POSITION_IDX = 14  # player.id (special parser)
@@ -213,15 +213,14 @@ class EventValidator:
 
         # Mapping from config dict_path to vector index
         # Only includes categorical features that need alignment
-        # Range features (location, duration, minute) are kept as-is after clipping
+        # Range features (location, duration, unified_time) are kept as-is after clipping
+        # Zeroed features (second, minute) are kept as-is
         COMMON_FEATURE_INDEX_MAP = {
             "type.id": self.EVENT_TYPE_IDX,
             "play_pattern.id": self.PLAY_PATTERN_IDX,
             "under_pressure": self.UNDER_PRESSURE_IDX,
             "out": self.OUT_IDX,
             "counterpress": self.COUNTERPRESS_IDX,
-            "period": self.PERIOD_IDX,
-            "second": self.SECOND_IDX,
             "position.id": self.POSITION_IDX,
         }
 
@@ -246,7 +245,9 @@ class EventValidator:
             )
 
         # Special parsers (minute, team IDs, player position) are handled:
-        # - minute: range feature, already clipped
+        # - unified_time (index 8): range feature, already clipped
+        # - second (index 9): zeroed feature, already clipped
+        # - minute (index 11): zeroed feature, already clipped
         # - team.id, possession_team.id: already clipped to [0,1]
         # - player.id: already clipped to [0,1]
 
@@ -718,27 +719,31 @@ class EventValidator:
         ]:
             self._validate_boolean_feature(event[idx], name, idx, report)
 
-        # Validate period (index 8)
-        self._validate_categorical_feature(
+        # Validate unified_time (index 8) - range feature [0, 1]
+        self._validate_range_feature(
             event[self.PERIOD_IDX],
-            "period",
+            "unified_time",
             self.PERIOD_IDX,
-            list(range(1, 6)),
-            "Period",
+            0.0,
+            1.0,
+            "normalised total match seconds",
             report,
-            explanation="Football matches have 2 regular periods, with up to 3 additional periods for extra time"
+            explanation="Unified time: normalised total seconds since match start (0 = kickoff, 1 = max match time)"
         )
 
-        # Validate second (index 9)
-        self._validate_categorical_feature(
-            event[self.SECOND_IDX],
-            "second",
-            self.SECOND_IDX,
-            list(range(0, 60)),
-            "Second",
-            report,
-            explanation="Seconds within a minute, must be 0-59"
-        )
+        # Validate second (index 9) - zeroed feature, expect 0
+        if abs(event[self.SECOND_IDX]) > 1e-6:
+            issue = ValidationIssue(
+                code="EXPECTED_ZERO_FEATURE",
+                message=f"second (index {self.SECOND_IDX}) should be 0, got {event[self.SECOND_IDX]}",
+                severity=IssueSeverity.WARNING,
+                field_name="second",
+                field_index=self.SECOND_IDX,
+                expected_value="0",
+                actual_value=event[self.SECOND_IDX],
+                explanation="The second slot is deprecated; time is encoded in the unified_time feature at index 8"
+            )
+            report.add_issue(issue)
 
         # Validate position (index 10)
         self._validate_categorical_feature(
@@ -751,17 +756,19 @@ class EventValidator:
             explanation="StatsBomb defines 25 player positions"
         )
 
-        # Validate minute (index 11) - special parser, normalized as range
-        self._validate_range_feature(
-            event[self.MINUTE_IDX],
-            "minute",
-            self.MINUTE_IDX,
-            0.0,
-            60.0,
-            "minutes",
-            report,
-            explanation="Minute within the period (0-60, where 60+ indicates stoppage time)"
-        )
+        # Validate minute (index 11) - zeroed feature, expect 0
+        if abs(event[self.MINUTE_IDX]) > 1e-6:
+            issue = ValidationIssue(
+                code="EXPECTED_ZERO_FEATURE",
+                message=f"minute (index {self.MINUTE_IDX}) should be 0, got {event[self.MINUTE_IDX]}",
+                severity=IssueSeverity.WARNING,
+                field_name="minute",
+                field_index=self.MINUTE_IDX,
+                expected_value="0",
+                actual_value=event[self.MINUTE_IDX],
+                explanation="The minute slot is deprecated; time is encoded in the unified_time feature at index 8"
+            )
+            report.add_issue(issue)
 
         # Validate team and possession team (indices 12-13)
         # These are normalized identifiers, should be between 0 and 1
@@ -1305,52 +1312,35 @@ class EventValidator:
         Validate that events are in chronological order.
 
         Checks:
-        - Periods are non-decreasing
-        - Within same period, time is non-decreasing
+        - Unified time (index 8) is non-decreasing across the sequence
         """
         self.logger.debug("Validating chronological order")
 
+        MAX_MATCH_SECONDS = 9059  # from UnifiedTimeParser
+
         for i in range(len(events) - 1):
-            curr_period = events[i][self.PERIOD_IDX]
-            next_period = events[i + 1][self.PERIOD_IDX]
-
-            curr_minute = events[i][self.MINUTE_IDX]
-            next_minute = events[i + 1][self.MINUTE_IDX]
-
-            curr_second = events[i][self.SECOND_IDX]
-            next_second = events[i + 1][self.SECOND_IDX]
-
-            # Denormalize period (categorical)
-            curr_period_val = round(curr_period * 5)  # Periods 1-5
-            next_period_val = round(next_period * 5)
-
-            # Denormalize minute and second (range)
-            curr_minute_val = curr_minute * 60
-            next_minute_val = next_minute * 60
-            curr_second_val = round(curr_second * 60)
-            next_second_val = round(next_second * 60)
-
-            # Calculate total time in seconds
-            curr_time = curr_period_val * 45 * 60 + curr_minute_val * 60 + curr_second_val
-            next_time = next_period_val * 45 * 60 + next_minute_val * 60 + next_second_val
+            curr_time = events[i][self.PERIOD_IDX]
+            next_time = events[i + 1][self.PERIOD_IDX]
 
             if next_time < curr_time:
+                curr_secs = curr_time * MAX_MATCH_SECONDS
+                next_secs = next_time * MAX_MATCH_SECONDS
                 issue = ValidationIssue(
                     code="NON_CHRONOLOGICAL_ORDER",
                     message=f"Events {i} and {i+1} are not in chronological order",
                     severity=IssueSeverity.ERROR,
                     explanation=(
-                        f"Event {i} occurs at period {curr_period_val}, "
-                        f"minute {curr_minute_val:.1f}, second {curr_second_val}, "
-                        f"but event {i+1} occurs at period {next_period_val}, "
-                        f"minute {next_minute_val:.1f}, second {next_second_val}. "
+                        f"Event {i} occurs at {curr_secs:.0f}s "
+                        f"(normalised {curr_time:.4f}), "
+                        f"but event {i+1} occurs at {next_secs:.0f}s "
+                        f"(normalised {next_time:.4f}). "
                         "Events must be in chronological order."
                     )
                 )
                 report.add_sequence_issue(issue)
                 self.logger.error(
                     f"Non-chronological order between events {i} and {i+1}: "
-                    f"{curr_time:.1f}s -> {next_time:.1f}s"
+                    f"{curr_secs:.0f}s -> {next_secs:.0f}s"
                 )
 
         self.logger.debug("Chronological order validation complete")
@@ -1473,32 +1463,20 @@ class EventValidator:
         Validate that time gaps between events are reasonable.
 
         Large time gaps might indicate missing events or data issues.
+        Uses the unified_time feature at index 8 (PERIOD_IDX).
         """
         self.logger.debug("Validating time gaps")
 
+        MAX_MATCH_SECONDS = 9059  # from UnifiedTimeParser
+
         for i in range(len(events) - 1):
-            curr_period = events[i][self.PERIOD_IDX]
-            next_period = events[i + 1][self.PERIOD_IDX]
+            curr_time = events[i][self.PERIOD_IDX] * MAX_MATCH_SECONDS
+            next_time = events[i + 1][self.PERIOD_IDX] * MAX_MATCH_SECONDS
 
-            curr_minute = events[i][self.MINUTE_IDX]
-            next_minute = events[i + 1][self.MINUTE_IDX]
+            time_gap = next_time - curr_time
 
-            curr_second = events[i][self.SECOND_IDX]
-            next_second = events[i + 1][self.SECOND_IDX]
-
-            # Denormalize
-            curr_period_val = round(curr_period * 5)
-            next_period_val = round(next_period * 5)
-            curr_minute_val = curr_minute * 60
-            next_minute_val = next_minute * 60
-            curr_second_val = round(curr_second * 60)
-            next_second_val = round(next_second * 60)
-
-            # Calculate time difference in seconds
-            if curr_period_val == next_period_val:
-                time_gap = (next_minute_val - curr_minute_val) * 60 + (next_second_val - curr_second_val)
-            else:
-                # Different periods - skip validation
+            # Skip negative gaps (handled by chronological order check)
+            if time_gap < 0:
                 continue
 
             if time_gap > self.max_time_gap:

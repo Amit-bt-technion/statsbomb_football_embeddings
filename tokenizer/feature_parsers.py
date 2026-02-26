@@ -162,3 +162,70 @@ class DoNothingParser(FeatureParser):
         :return: The original value.
         """
         return val
+
+
+class ZeroFeatureParser(FeatureParser):
+    """
+    Parser that always returns zero. Used to nullify deprecated feature slots
+    while preserving the vector layout.
+    """
+    def __init__(self, name: str, as_list: bool = False):
+        super().__init__(name)
+        self.as_list = as_list
+
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
+        """
+        Always returns 0 (or [0] when as_list=True for special parser context).
+        :param val: Ignored.
+        :return: 0 or [0].
+        """
+        return [0] if self.as_list else 0
+
+
+class UnifiedTimeParser(FeatureParser):
+    """
+    Computes a single normalized total-match-seconds value from the event's
+    minute and second fields.
+
+    Placed at the "period" key in feature_parsers (vector index 8) to replace
+    the three separate time features (period, second, minute) with one unified
+    time representation.
+
+    The StatsBomb ``minute`` field is absolute match time (resets to 45 at
+    half-time, 90 at the start of extra time, etc.), so the formula is simply:
+
+        total_seconds = minute * 60 + second
+
+    Denormalization is: ``total_seconds = normalized * MAX_MATCH_SECONDS``.
+
+    Upper-bound derivation (generous ceiling covering extra time + penalties):
+        - Max minute:          150
+        - Max second:          59
+        - MAX_MATCH_SECONDS:   150 * 60 + 59 = 9059 s
+    """
+
+    MAX_MATCH_SECONDS = 9059
+
+    def __init__(self, name: str):
+        super().__init__(name)
+
+    def get_normalized(self, val: Union[float, List[dict]], **kwargs) -> Union[float, List[float]]:
+        """
+        Computes total seconds since match start, normalized to [0, 1].
+
+        The period value is received as ``val`` (extracted from the event's
+        "period" key) but is **not used** in the calculation.  Minute and
+        second are read from ``kwargs["event"]``.
+
+        :param val: The period value (ignored).
+        :param kwargs: Must contain ``event`` — the full event dictionary.
+        :return: Normalized total seconds in [0, 1].
+        """
+        event = kwargs.get("event", {})
+        minute = int(event.get("minute", 0))
+        second = int(event.get("second", 0))
+
+        total_seconds = minute * 60 + second
+        total_seconds = max(0, min(total_seconds, self.MAX_MATCH_SECONDS))
+
+        return total_seconds / self.MAX_MATCH_SECONDS

@@ -90,7 +90,7 @@ def test_with_real_data():
 
         # Validate first 10 events individually
         for i in range(min(10, len(events))):
-            report = validator.validate_event(events[i])
+            report = validator.validate_event(events[i], align_embedding=True)
             status = "✓" if report.valid else "✗"
             print(f"Event {i}: {status} {report.event_type_name or 'Unknown'} "
                   f"(score: {report.validity_score:.2%})")

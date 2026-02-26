@@ -24,6 +24,8 @@ from tokenizer.feature_parsers import (
     PlayerPositionFeatureParser,
     FreezeFrameFeaturesParser,
     DoNothingParser,
+    UnifiedTimeParser,
+    ZeroFeatureParser,
 )
 
 # Import main classes
@@ -60,6 +62,8 @@ __all__ = [
     "PlayerPositionFeatureParser",
     "FreezeFrameFeaturesParser",
     "DoNothingParser",
+    "UnifiedTimeParser",
+    "ZeroFeatureParser",
     # Configuration
     "vector_size",
     "num_of_players_in_freeze_frame",
