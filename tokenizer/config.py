@@ -51,10 +51,10 @@ event_types_mapping = {
             "counterpress": CategoricalFeatureParser("counterpress", [0, 1]),
             "period": CategoricalFeatureParser("period", [i for i in range(1, 6)]),
             "second": CategoricalFeatureParser("second", [i for i in range(0, 60)]),
-            "position.id": CategoricalFeatureParser("position", [i for i in range(1,26)])
+            "position.id": CategoricalFeatureParser("position", [i for i in range(1,26)]),
+            "minute": RangeFeatureParser("minute", min_value=0, max_value=140)
         },
         "special_parsers": {
-            "minute": RangeFeatureParser("minute", min_value=0, max_value=140),
             "team.id": TeamIdParser("team"),
             "possession_team.id": TeamIdParser("possession_team"),
             "player.id": PlayerPositionFeatureParser("player_designated_position"),
