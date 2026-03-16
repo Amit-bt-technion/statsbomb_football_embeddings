@@ -54,7 +54,7 @@ event_types_mapping = {
             "position.id": CategoricalFeatureParser("position", [i for i in range(1,26)])
         },
         "special_parsers": {
-            "minute": MinuteFeatureParser("minute", 0, 60),
+            "minute": RangeFeatureParser("minute", min_value=0, max_value=140),
             "team.id": TeamIdParser("team"),
             "possession_team.id": TeamIdParser("possession_team"),
             "player.id": PlayerPositionFeatureParser("player_designated_position"),
