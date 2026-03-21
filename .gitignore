@@ -1,5 +1,8 @@
 # Custom
 .idea
+events_csv
+open-data
+events_csv_targets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
